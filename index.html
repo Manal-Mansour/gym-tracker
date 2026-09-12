@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل متابعة برنامج المقاومة - Full Body A/B/C</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --card-bg: rgba(255, 255, 255, 0.98);
+            --bg-color: #f0f3f8;
+        }
+        body {
+            background: var(--bg-color);
+            font-family: 'Cairo', sans-serif;
+            color: #2f3640;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+        .app-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 25px 15px;
+            border-radius: 0 0 25px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .app-header h1 {
+            font-weight: 900;
+            font-size: 1.4rem;
+            margin: 0;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            border-radius: 20px;
+            background: var(--card-bg);
+            margin-bottom: 20px;
+        }
+        .btn-success-custom {
+            background: linear-gradient(135deg, #2ed573 0%, #26af5f 100%);
+            border: none;
+            color: white;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 10px 20px;
+            box-shadow: 0 4px 15px rgba(46,213,115,0.3);
+        }
+        .nav-pills {
+            background: white;
+            padding: 6px;
+            border-radius: 50px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .nav-pills .nav-link {
+            border-radius: 40px;
+            color: #718093;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 8px 12px;
+            transition: all 0.3s;
+        }
+        .nav-pills .nav-link.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(42,82,152,0.3);
+        }
+        .table {
+            vertical-align: middle;
+            font-size: 0.85rem;
+        }
+        .table th {
+            background-color: #f1f3f5;
+            color: #2f3640;
+            border-top: none;
+            font-weight: 700;
+            text-align: center;
+            padding: 10px 6px;
+        }
+        .table td {
+            text-align: center;
+            padding: 10px 6px;
+        }
+        .exercise-name-cell {
+            text-align: right !important;
+            font-weight: 700;
+            color: #1e3c72;
+            background-color: #fafbfc;
+            white-space: nowrap;
+        }
+        .form-control {
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #dcdde1;
+            padding: 6px;
+            font-size: 0.85rem;
+            background-color: #fdfdfd;
+        }
+        .form-control:focus {
+            border-color: #2a5298;
+            box-shadow: 0 0 0 3px rgba(42,82,152,0.15);
+        }
+        .floating-actions {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px 15px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            width: 90%;
+            max-width: 420px;
+            justify-content: center;
+        }
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1050;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-header">
+        <h1><i class="fa-solid fa-dumbbell me-2"></i> سجل متابعة برنامج المقاومة</h1>
+        <p class="mb-0 text-white-50 small mt-1">Full Body A / B / C • Lower Body & Glutes Focus</p>
+    </div>
+
+    <div class="container my-2" style="max-width: 950px;">
+        <div class="card p-3 mb-3">
+            <div class="row align-items-center g-2">
+                <div class="col-md-7">
+                    <label for="weekSelect" class="form-label fw-bold text-secondary small mb-1"><i class="fa-solid fa-calendar-week me-1 text-primary"></i> اختر الأسبوع التدريبي:</label>
+                    <select id="weekSelect" class="form-select border-2">
+                        <option value="1">الأسبوع الأول (Week 1)</option>
+                        <option value="2">الأسبوع الثاني (Week 2)</option>
+                        <option value="3">الأسبوع الثالث (Week 3)</option>
+                        <option value="4">الأسبوع الرابع (Week 4)</option>
+                        <option value="5">الأسبوع الخامس (Week 5)</option>
+                        <option value="6">الأسبوع السادس (Week 6)</option>
+                        <option value="7">الأسبوع السابع (Week 7)</option>
+                        <option value="8">الأسبوع الثامن (Week 8)</option>
+                    </select>
+                </div>
+                <div class="col-md-5 text-center text-md-end mt-2 mt-md-0">
+                    <button class="btn btn-success-custom w-100" onclick="saveData()"><i class="fa-solid fa-floppy-disk me-1"></i> حفظ التمارين</button>
+                </div>
+            </div>
+        </div>
+
+        <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pills-a" type="button">DAY A</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-b" type="button">DAY B</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-c" type="button">DAY C</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-progress" type="button">القياسات</button></li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+            <!-- Day A -->
+            <div class="tab-pane fade show active" id="pills-a" role="tabpanel">
+                <div class="card p-2 p-md-3">
+                    <h6 class="text-primary fw-bold mb-2">Target Muscles: Glutes, Quads & Push</h6>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-sm table-bordered text-center bg-light">
+                            <thead><tr><th>التمرين</th><th>المجموعات (Sets)</th><th>التكرارات (Reps)</th><th>التركيز</th></tr></thead>
+                            <tbody id="base-table-A"></tbody>
+                        </table>
+                    </div>
+                    <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">سجل الأداء الفعلي (Day A)</h6>
+                    <div class="table-responsive"><table class="table table-bordered align-middle" id="table-A"><thead><tr><th>التمرين</th><th>Set 1</th><th>Set 2</th><th>Set 3</th><th>RIR</th><th>ملاحظات</th></tr></thead><tbody></tbody></table></div>
+                </div>
+            </div>
+
+            <!-- Day B -->
+            <div class="tab-pane fade" id="pills-b" role="tabpanel">
+                <div class="card p-2 p-md-3">
+                    <h6 class="text-primary fw-bold mb-2">Target Muscles: Back, Hamstrings & Glutes</h6>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-sm table-bordered text-center bg-light">
+                            <thead><tr><th>التمرين</th><th>المجموعات (Sets)</th><th>التكرارات (Reps)</th><th>التركيز</th></tr></thead>
+                            <tbody id="base-table-B"></tbody>
+                        </table>
+                    </div>
+                    <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">سجل الأداء الفعلي (Day B)</h6>
+                    <div class="table-responsive"><table class="table table-bordered align-middle" id="table-B"><thead><tr><th>التمرين</th><th>Set 1</th><th>Set 2</th><th>Set 3</th><th>RIR</th><th>ملاحظات</th></tr></thead><tbody></tbody></table></div>
+                </div>
+            </div>
+
+            <!-- Day C -->
+            <div class="tab-pane fade" id="pills-c" role="tabpanel">
+                <div class="card p-2 p-md-3">
+                    <h6 class="text-primary fw-bold mb-2">Target Muscles: Glutes, Legs & Upper</h6>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-sm table-bordered text-center bg-light">
+                            <thead><tr><th>التمرين</th><th>المجموعات (Sets)</th><th>التكرارات (Reps)</th><th>التركيز</th></tr></thead>
+                            <tbody id="base-table-C"></tbody>
+                        </table>
+                    </div>
+                    <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">سجل الأداء الفعلي (Day C)</h6>
+                    <div class="table-responsive"><table class="table table-bordered align-middle" id="table-C"><thead><tr><th>التمرين</th><th>Set 1</th><th>Set 2</th><th>Set 3</th><th>RIR</th><th>ملاحظات</th></tr></thead><tbody></tbody></table></div>
+                </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="tab-pane fade" id="pills-progress" role="tabpanel">
+                <div class="card p-2 p-md-3">
+                    <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">متابعة الوزن والقياسات الأسبوعية</h6>
+                    <div class="table-responsive"><table class="table table-bordered align-middle" id="table-Progress"><thead><tr><th>الأسبوع</th><th>الوزن (كجم)</th><th>الخصر</th><th>أهم تقدم</th><th>ملاحظات</th></tr></thead><tbody></tbody></table></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-actions">
+        <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold bg-white shadow-sm" onclick="exportData()"><i class="fa-solid fa-download me-1"></i> Export Data</button>
+        <label class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold bg-white shadow-sm mb-0" style="cursor: pointer;">
+            <i class="fa-solid fa-upload me-1"></i> Import Data <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+        </label>
+    </div>
+
+    <div class="toast-container">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0 shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fw-bold py-2" id="toastMessage">Saved successfully!</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const exercisesData = {
+            A: [
+                {name: "Smith Hip Thrust", sets: 3, reps: "8–12", focus: "Glutes"},
+                {name: "Leg Press", sets: 3, reps: "10–12", focus: "Quads + Glutes"},
+                {name: "Chest Press", sets: 3, reps: "8–12", focus: "Chest"},
+                {name: "Lat Pulldown", sets: 3, reps: "8–12", focus: "Back"},
+                {name: "Leg Extension", sets: 2, reps: "12–15", focus: "Quads"},
+                {name: "Leg Outer", sets: 2, reps: "15–20", focus: "Glute medius"},
+                {name: "Cable Triceps", sets: 2, reps: "10–15", focus: "Triceps"},
+                {name: "Abdominal Machine", sets: 2, reps: "12–15", focus: "Core"}
+            ],
+            B: [
+                {name: "Leg Curl", sets: 3, reps: "10–15", focus: "Hamstrings"},
+                {name: "Smith Hip Thrust", sets: 3, reps: "10–12", focus: "Glutes"},
+                {name: "Mid Row", sets: 3, reps: "8–12", focus: "Back"},
+                {name: "Lat Pulldown", sets: 2, reps: "10–12", focus: "Back"},
+                {name: "Chest-Supported Row 45°", sets: 2, reps: "10–12", focus: "Back"},
+                {name: "Back Extension", sets: 2, reps: "12–15", focus: "Glutes + Hams"},
+                {name: "Rear Delt / Pec Fly", sets: 2, reps: "12–15", focus: "Rear Delts"},
+                {name: "Cable Biceps", sets: 2, reps: "10–15", focus: "Biceps"},
+                {name: "Captain Chair Knee Raise", sets: 2, reps: "10–15", focus: "Core"}
+            ],
+            C: [
+                {name: "Leg Press", sets: 3, reps: "10–15", focus: "Quads + Glutes"},
+                {name: "Smith Hip Thrust", sets: 2, reps: "8–12", focus: "Glutes"},
+                {name: "Leg Curl", sets: 2, reps: "10–15", focus: "Hamstrings"},
+                {name: "Chest Press", sets: 2, reps: "8–12", focus: "Chest"},
+                {name: "Mid Row", sets: 2, reps: "8–12", focus: "Back"},
+                {name: "Shoulder Press", sets: 2, reps: "8–12", focus: "Shoulders"},
+                {name: "Leg Outer", sets: 2, reps: "15–20", focus: "Glute medius"},
+                {name: "Cable Triceps", sets: 2, reps: "10–15", focus: "Triceps"},
+                {name: "Cable Biceps", sets: 2, reps: "10–15", focus: "Biceps"},
+                {name: "Abdominal Machine", sets: 2, reps: "12–15", focus: "Core"}
+            ]
+        };
+
+        function buildBaseTables() {
+            ['A', 'B', 'C'].forEach(day => {
+                const tbody = document.getElementById(`base-table-${day}`);
+                tbody.innerHTML = '';
+                exercisesData[day].forEach(ex => {
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `<td class="text-start fw-bold">${ex.name}</td><td>${ex.sets}</td><td>${ex.reps}</td><td><span class="badge bg-secondary">${ex.focus}</span></td>`;
+                    tbody.appendChild(tr);
+                });
+            });
+        }
+
+        function buildTables() {
+            const currentWeek = document.getElementById('weekSelect').value;
+            ['A', 'B', 'C'].forEach(day => {
+                const tbody = document.querySelector(`#table-${day} tbody`);
+                tbody.innerHTML = '';
+                exercisesData[day].forEach((ex, idx) => {
+                    let tr = document.createElement('tr');
+                    let tdName = document.createElement('td');
+                    tdName.className = "exercise-name-cell";
+                    tdName.innerHTML = `<span class="badge bg-secondary me-1">${idx+1}</span> ${ex.name}`;
+                    tr.appendChild(tdName);
+
+                    for (let s = 1; s <= 3; s++) {
+                        let tdSet = document.createElement('td');
+                        if (s <= ex.sets) {
+                            let key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
+                            let val = localStorage.getItem(key) || '';
+                            tdSet.innerHTML = `<input type="text" class="form-control form-control-sm" placeholder="وزن×تكرار" data-key="${key}" value="${val}">`;
+                        } else {
+                            tdSet.innerHTML = `<span class="text-muted">—</span>`;
+                        }
+                        tr.appendChild(tdSet);
+                    }
+
+                    let rirKey = `workout_${day}_w${currentWeek}_ex${idx}_rir`;
+                    let rirVal = localStorage.getItem(rirKey) || '';
+                    let tdRir = document.createElement('td');
+                    tdRir.innerHTML = `<input type="text" class="form-control form-control-sm" placeholder="RIR" data-key="${rirKey}" value="${rirVal}">`;
+                    tr.appendChild(tdRir);
+
+                    let noteKey = `workout_${day}_w${currentWeek}_ex${idx}_note`;
+                    let noteVal = localStorage.getItem(noteKey) || '';
+                    let tdNote = document.createElement('td');
+                    tdNote.innerHTML = `<input type="text" class="form-control form-control-sm" placeholder="ملاحظة" data-key="${noteKey}" value="${noteVal}">`;
+                    tr.appendChild(tdNote);
+
+                    tbody.appendChild(tr);
+                });
+            });
+
+            const progressTbody = document.querySelector('#table-Progress tbody');
+            progressTbody.innerHTML = '';
+            for (let w = 1; w <= 8; w++) {
+                let tr = document.createElement('tr');
+                let tdWeek = document.createElement('td');
+                tdWeek.className = "fw-bold text-primary";
+                tdWeek.innerText = `أسبوع ${w}`;
+                tr.appendChild(tdWeek);
+
+                tr.appendChild(createInputTd(`prog_w${w}_weight`, 'كجم'));
+                tr.appendChild(createInputTd(`prog_w${w}_waist`, 'سم'));
+                tr.appendChild(createInputTd(`prog_w${w}_progress`, 'التقدم'));
+                tr.appendChild(createInputTd(`prog_w${w}_notes`, 'ملاحظات'));
+                progressTbody.appendChild(tr);
+            }
+        }
+
+        function createInputTd(key, placeholder) {
+            let td = document.createElement('td');
+            let val = localStorage.getItem(key) || '';
+            td.innerHTML = `<input type="text" class="form-control form-control-sm" placeholder="${placeholder}" data-key="${key}" value="${val}">`;
+            return td;
+        }
+
+        function saveData() {
+            document.querySelectorAll('input[data-key]').forEach(input => {
+                localStorage.setItem(input.getAttribute('data-key'), input.value);
+            });
+            showToast("Saved successfully!");
+        }
+
+        function exportData() {
+            let backupData = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                let key = localStorage.key(i);
+                backupData[key] = localStorage.getItem(key);
+            }
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData));
+            let downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "gym_tracker_backup.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast("Data exported successfully!");
+        }
+
+        function importData(event) {
+            let file = event.target.files[0];
+            if (!file) return;
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let backupData = JSON.parse(e.target.result);
+                    Object.keys(backupData).forEach(key => {
+                        localStorage.setItem(key, backupData[key]);
+                    });
+                    buildTables();
+                    showToast("Data imported successfully!");
+                } catch(err) {
+                    alert("Invalid file!");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showToast(msg) {
+            document.getElementById('toastMessage').innerText = msg;
+            var toast = new bootstrap.Toast(document.getElementById('liveToast'));
+            toast.show();
+        }
+
+        document.getElementById('weekSelect').addEventListener('change', buildTables);
+        window.addEventListener('DOMContentLoaded', () => {
+            buildBaseTables();
+            buildTables();
+        });
+    </script>
+</body>
+</html>
