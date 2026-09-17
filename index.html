@@ -2,240 +2,867 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سجل متابعة برنامج المقاومة - Full Body A/B/C</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>سجل متابعة برنامج المقاومة - Gym Tracker</title>
+    <!-- Bootstrap 5 RTL -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            --card-bg: rgba(255, 255, 255, 0.98);
-            --bg-color: #f0f3f8;
+            --brand-primary: #1e3c72;
+            --brand-gradient: linear-gradient(135deg, #0f172a 0%, #1e3c72 60%, #2a5298 100%);
+            --accent-green: #10b981;
+            --accent-green-hover: #059669;
+            --accent-blue: #2563eb;
+            --card-bg: #ffffff;
+            --body-bg: #f1f5f9;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
         }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            background: var(--bg-color);
-            font-family: 'Cairo', sans-serif;
-            color: #2f3640;
+            background: var(--body-bg);
+            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-dark);
             min-height: 100vh;
-            padding-bottom: 70px;
-        }
-        .app-header {
-            background: var(--primary-gradient);
-            color: white;
-            padding: 25px 15px;
-            border-radius: 0 0 25px 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .app-header h1 {
-            font-weight: 900;
-            font-size: 1.4rem;
+            padding-bottom: 95px;
             margin: 0;
         }
-        .card {
-            border: none;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            border-radius: 20px;
-            background: var(--card-bg);
-            margin-bottom: 20px;
-        }
-        .btn-success-custom {
-            background: linear-gradient(135deg, #2ed573 0%, #26af5f 100%);
-            border: none;
+
+        /* App Top Header */
+        .app-header {
+            background: var(--brand-gradient);
             color: white;
-            font-weight: 700;
-            border-radius: 12px;
-            padding: 10px 20px;
-            box-shadow: 0 4px 15px rgba(46,213,115,0.3);
+            padding: 16px 16px 12px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.25);
+            position: relative;
         }
-        .nav-pills {
+        .app-header .app-title {
+            font-weight: 900;
+            font-size: 1.25rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .app-header .subtitle {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 2px;
+            margin-bottom: 10px;
+        }
+
+        /* Sticky Control Bar */
+        .sticky-controls {
+            position: sticky;
+            top: 0;
+            z-index: 1020;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            padding: 8px 12px 6px;
+        }
+
+        .controls-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .week-select-wrapper {
+            flex: 1;
+        }
+        .week-select {
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: 12px;
+            border: 1.5px solid #cbd5e1;
+            padding: 7px 12px;
+            color: var(--brand-primary);
+            background-color: #f8fafc;
+            width: 100%;
+            height: 42px;
+        }
+        .week-select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .view-mode-toggle {
+            display: flex;
+            background: #e2e8f0;
+            border-radius: 10px;
+            padding: 2px;
+        }
+        .view-mode-btn {
+            border: none;
+            background: transparent;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 6px 10px;
+            border-radius: 8px;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+        .view-mode-btn.active {
             background: white;
-            padding: 6px;
-            border-radius: 50px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            color: var(--brand-primary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        /* Day Navigation Tabs */
+        .day-nav-pills {
+            display: flex;
+            gap: 6px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .day-nav-pills::-webkit-scrollbar {
+            display: none;
+        }
+        .day-nav-item {
+            flex: 1;
+            min-width: 75px;
+        }
+        .day-nav-link {
+            width: 100%;
+            border: none;
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 8px 4px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.25s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            border: 1.5px solid transparent;
+        }
+        .day-nav-link .day-tag {
+            font-size: 0.88rem;
+            font-weight: 800;
+        }
+        .day-nav-link .day-count {
+            font-size: 0.68rem;
+            padding: 1px 6px;
+            border-radius: 10px;
+            background: #cbd5e1;
+            color: #1e293b;
+        }
+        .day-nav-link.active {
+            background: var(--brand-primary);
+            color: white;
+            border-color: #1e3c72;
+            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.25);
+        }
+        .day-nav-link.active .day-count {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+
+        /* Day Overview Header */
+        .day-summary-card {
+            background: white;
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .day-summary-card .muscle-focus {
+            font-weight: 700;
+            color: var(--brand-primary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        .day-summary-card .progress-pill {
+            font-size: 0.78rem;
+            font-weight: 800;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        /* Exercise Cards */
+        .exercise-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1.5px solid var(--border-color);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.03);
+            margin-bottom: 16px;
+            padding: 14px 14px 12px;
+            transition: all 0.2s ease;
+        }
+        .exercise-card.is-completed {
+            border-color: #86efac;
+            background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 40px);
+        }
+
+        .exercise-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .exercise-title-group {
+            flex: 1;
+        }
+        .exercise-num-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 8px;
+            background: #e2e8f0;
+            color: #334155;
+            font-size: 0.78rem;
+            font-weight: 800;
+            margin-left: 6px;
+        }
+        .exercise-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin: 0;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .exercise-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 5px;
+        }
+        .badge-focus {
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+        .badge-target {
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .exercise-status-badge {
+            font-size: 0.72rem;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .status-completed {
+            background: #dcfce7;
+            color: #15803d;
+        }
+        .status-inprogress {
+            background: #fef3c7;
+            color: #b45309;
+        }
+        .status-pending {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        /* History Accordion */
+        .history-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px dashed #cbd5e1;
+            padding: 8px 12px;
+            margin-bottom: 12px;
+        }
+        .history-toggle-btn {
+            background: transparent;
+            border: none;
+            padding: 0;
+            width: 100%;
+            text-align: right;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
         }
-        .nav-pills .nav-link {
-            border-radius: 40px;
-            color: #718093;
+        .history-last-perf {
+            font-size: 0.78rem;
+            color: #0284c7;
+            font-weight: 700;
+            margin-top: 4px;
+            padding-top: 4px;
+            border-top: 1px solid #e2e8f0;
+            direction: ltr;
+            text-align: right;
+        }
+        .history-details {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.78rem;
+        }
+        .history-week-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            border-bottom: 1px dotted #e2e8f0;
+        }
+        .history-week-row:last-child {
+            border-bottom: none;
+        }
+        .history-week-name {
+            font-weight: 700;
+            color: #334155;
+        }
+        .history-week-val {
+            font-weight: 700;
+            color: #1e293b;
+            direction: ltr;
+        }
+
+        /* Set Entry Rows */
+        .sets-section-title {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #475569;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .copy-all-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: var(--brand-primary);
+            font-weight: 700;
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-all-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .set-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 1fr;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .set-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 8px 4px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .input-group-custom {
+            position: relative;
+        }
+        .input-group-custom input {
+            width: 100%;
+            height: 44px;
+            font-size: 16px; /* Prevents auto-zoom on iOS */
+            font-weight: 700;
+            text-align: center;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            background: #ffffff;
+            color: var(--text-dark);
+            padding: 6px;
+            direction: ltr;
+        }
+        .input-group-custom input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            background: #f8fafc;
+        }
+        .input-unit-label {
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.68rem;
+            color: #94a3b8;
+            pointer-events: none;
+        }
+
+        /* RIR and Notes */
+        .exercise-meta-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+            margin-bottom: 12px;
+        }
+        @media (max-width: 480px) {
+            .exercise-meta-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        .meta-field label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .meta-field input {
+            width: 100%;
+            height: 42px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 6px 10px;
+        }
+        .meta-field input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .rir-quick-pills {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+            overflow-x: auto;
+        }
+        .rir-pill {
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+        }
+        .rir-pill.selected {
+            background: var(--brand-primary);
+            color: white;
+            border-color: var(--brand-primary);
+        }
+
+        /* Card Action Buttons */
+        .exercise-card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .btn-card-save {
+            flex: 2;
+            height: 44px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-card-save:active {
+            transform: scale(0.98);
+        }
+        .btn-card-next {
+            flex: 1;
+            height: 44px;
+            background: #f1f5f9;
+            border: 1.5px solid #cbd5e1;
+            color: #334155;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .btn-card-next:active {
+            background: #e2e8f0;
+        }
+
+        /* Floating Bottom Action Bar */
+        .floating-bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border-color);
+            padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+            z-index: 1030;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .floating-save-btn {
+            flex: 2;
+            height: 46px;
+            background: var(--brand-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(30, 60, 114, 0.25);
+            cursor: pointer;
+        }
+        .floating-save-btn:active {
+            transform: scale(0.98);
+        }
+        .floating-action-btn {
+            height: 46px;
+            padding: 0 12px;
+            background: #ffffff;
+            border: 1.5px solid #cbd5e1;
+            color: #334155;
+            border-radius: 12px;
             font-weight: 700;
             font-size: 0.8rem;
-            padding: 8px 12px;
-            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
         }
-        .nav-pills .nav-link.active {
-            background: var(--primary-gradient);
-            color: white;
-            box-shadow: 0 4px 15px rgba(42,82,152,0.3);
+        .floating-action-btn:active {
+            background: #f1f5f9;
         }
-        .table {
-            vertical-align: middle;
-            font-size: 0.85rem;
-        }
-        .table th {
-            background-color: #f1f3f5;
-            color: #2f3640;
-            border-top: none;
-            font-weight: 700;
-            text-align: center;
-            padding: 10px 6px;
-        }
-        .table td {
-            text-align: center;
-            padding: 10px 6px;
+
+        /* Desktop & Table View styles */
+        .table-view-container {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
         }
         .exercise-name-cell {
             text-align: right !important;
             font-weight: 700;
-            color: #1e3c72;
-            background-color: #fafbfc;
+            color: var(--brand-primary);
+            background-color: #f8fafc;
             white-space: nowrap;
         }
-        .form-control {
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #dcdde1;
-            padding: 6px;
-            font-size: 0.85rem;
-            background-color: #fdfdfd;
+
+        /* Measurements / Progress Tab */
+        .progress-card {
+            background: white;
+            border-radius: 14px;
+            border: 1.5px solid var(--border-color);
+            padding: 14px;
+            margin-bottom: 12px;
         }
-        .form-control:focus {
-            border-color: #2a5298;
-            box-shadow: 0 0 0 3px rgba(42,82,152,0.15);
-        }
-        .floating-actions {
-            position: fixed;
-            bottom: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 8px 15px;
-            border-radius: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
+        .progress-card-title {
+            font-weight: 800;
+            color: var(--brand-primary);
+            margin-bottom: 10px;
             display: flex;
-            gap: 10px;
-            width: 90%;
-            max-width: 420px;
-            justify-content: center;
+            justify-content: space-between;
         }
+        .progress-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .progress-grid input, .progress-full-width input {
+            width: 100%;
+            height: 42px;
+            font-size: 16px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-weight: 600;
+        }
+        .progress-full-width {
+            margin-bottom: 8px;
+        }
+
+        /* Toast Container */
         .toast-container {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1050;
+            z-index: 2000;
+            width: 90%;
+            max-width: 380px;
+        }
+
+        /* Safe area & responsive adjustments */
+        @media (min-width: 768px) {
+            .app-header {
+                padding: 24px 20px 18px;
+            }
+            .app-header .app-title {
+                font-size: 1.5rem;
+            }
+            .container-app {
+                max-width: 820px;
+                margin: 0 auto;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="app-header">
-        <h1><i class="fa-solid fa-dumbbell me-2"></i> سجل متابعة برنامج المقاومة</h1>
-        <p class="mb-0 text-white-50 small mt-1">Full Body A / B / C • Lower Body & Glutes Focus</p>
-    </div>
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="container-app">
+            <div class="app-title">
+                <span><i class="fa-solid fa-dumbbell me-2"></i> سجل متابعة المقاومة</span>
+                <span id="saveStatusIndicator" class="badge bg-success bg-opacity-75" style="font-size: 0.72rem; font-weight: 700;">
+                    <i class="fa-solid fa-cloud-arrow-up me-1"></i> جاهز
+                </span>
+            </div>
+            <div class="subtitle">Full Body A / B / C • Lower Body & Glutes Focus</div>
+        </div>
+    </header>
 
-    <div class="container my-2" style="max-width: 950px;">
-        <div class="card p-3 mb-3">
-            <div class="row align-items-center g-2">
-                <div class="col-md-7">
-                    <label for="weekSelect" class="form-label fw-bold text-secondary small mb-1"><i class="fa-solid fa-calendar-week me-1 text-primary"></i> اختر الأسبوع التدريبي:</label>
-                    <select id="weekSelect" class="form-select border-2">
-                        <option value="1">الأسبوع الأول (Week 1)</option>
-                        <option value="2">الأسبوع الثاني (Week 2)</option>
-                        <option value="3">الأسبوع الثالث (Week 3)</option>
-                        <option value="4">الأسبوع الرابع (Week 4)</option>
-                        <option value="5">الأسبوع الخامس (Week 5)</option>
-                        <option value="6">الأسبوع السادس (Week 6)</option>
+    <!-- Sticky Navigation & Controls -->
+    <div class="sticky-controls">
+        <div class="container-app">
+            <div class="controls-row">
+                <div class="week-select-wrapper">
+                    <select id="weekSelect" class="form-select week-select" aria-label="اختر الأسبوع التدريبي">
+                        <option value="1">الأسبوع 1 (Week 1)</option>
+                        <option value="2">الأسبوع 2 (Week 2)</option>
+                        <option value="3">الأسبوع 3 (Week 3)</option>
+                        <option value="4">الأسبوع 4 (Week 4)</option>
+                        <option value="5">الأسبوع 5 (Week 5)</option>
+                        <option value="6">الأسبوع 6 (Week 6)</option>
                         <option value="7">الأسبوع السابع (Week 7)</option>
                         <option value="8">الأسبوع الثامن (Week 8)</option>
                     </select>
                 </div>
-                <div class="col-md-5 text-center text-md-end mt-2 mt-md-0">
-                    <button class="btn btn-success-custom w-100" onclick="saveData()"><i class="fa-solid fa-floppy-disk me-1"></i> حفظ التمارين</button>
-                </div>
-            </div>
-        </div>
-
-        <ul class="nav nav-pills nav-fill" id="pills-tab" role="tablist">
-            <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#pills-a" type="button">DAY A</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-b" type="button">DAY B</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-c" type="button">DAY C</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-progress" type="button">القياسات</button></li>
-        </ul>
-
-        <div class="tab-content" id="pills-tabContent">
-            <!-- Day A -->
-            <div class="tab-pane fade show active" id="pills-a" role="tabpanel">
-                <div class="card p-2 p-md-3">
-                    <h6 class="text-primary fw-bold mb-2">Target Muscles: Glutes, Quads & Push</h6>
-                    <div class="table-responsive mb-4">
-                        <table class="table table-sm table-bordered text-center bg-light">
-                            <thead><tr><th>التمرين</th><th>المجموعات (Sets)</th><th>التكرارات (Reps)</th><th>التركيز</th></tr></thead>
-                            <tbody id="base-table-A"></tbody>
-                        </table>
-                    </div>
-                    <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">سجل الأداء الفعلي (Day A)</h6>
-                    <div class="table-responsive"><table class="table table-bordered align-middle" id="table-A"><thead><tr><th>التمرين</th><th>Set 1</th><th>Set 2</th><th>Set 3</th><th>RIR</th><th>ملاحظات</th></tr></thead><tbody></tbody></table></div>
+                <div class="view-mode-toggle d-none d-md-flex">
+                    <button type="button" class="view-mode-btn active" id="btnViewCards" onclick="switchViewMode('cards')">
+                        <i class="fa-solid fa-layer-group me-1"></i> بطاقات
+                    </button>
+                    <button type="button" class="view-mode-btn" id="btnViewTable" onclick="switchViewMode('table')">
+                        <i class="fa-solid fa-table me-1"></i> جدول
+                    </button>
                 </div>
             </div>
 
-            <!-- Day B -->
-            <div class="tab-pane fade" id="pills-b" role="tabpanel">
-                <div class="card p-2 p-md-3">
-                    <h6 class="text-primary fw-bold mb-2">Target Muscles: Back, Hamstrings & Glutes</h6>
-                    <div class="table-responsive mb-4">
-                        <table class="table table-sm table-bordered text-center bg-light">
-                            <thead><tr><th>التمرين</th><th>المجموعات (Sets)</th><th>التكرارات (Reps)</th><th>التركيز</th></tr></thead>
-                            <tbody id="base-table-B"></tbody>
-                        </table>
-                    </div>
-                    <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">سجل الأداء الفعلي (Day B)</h6>
-                    <div class="table-responsive"><table class="table table-bordered align-middle" id="table-B"><thead><tr><th>التمرين</th><th>Set 1</th><th>Set 2</th><th>Set 3</th><th>RIR</th><th>ملاحظات</th></tr></thead><tbody></tbody></table></div>
-                </div>
-            </div>
-
-            <!-- Day C -->
-            <div class="tab-pane fade" id="pills-c" role="tabpanel">
-                <div class="card p-2 p-md-3">
-                    <h6 class="text-primary fw-bold mb-2">Target Muscles: Glutes, Legs & Upper</h6>
-                    <div class="table-responsive mb-4">
-                        <table class="table table-sm table-bordered text-center bg-light">
-                            <thead><tr><th>التمرين</th><th>المجموعات (Sets)</th><th>التكرارات (Reps)</th><th>التركيز</th></tr></thead>
-                            <tbody id="base-table-C"></tbody>
-                        </table>
-                    </div>
-                    <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">سجل الأداء الفعلي (Day C)</h6>
-                    <div class="table-responsive"><table class="table table-bordered align-middle" id="table-C"><thead><tr><th>التمرين</th><th>Set 1</th><th>Set 2</th><th>Set 3</th><th>RIR</th><th>ملاحظات</th></tr></thead><tbody></tbody></table></div>
-                </div>
-            </div>
-
-            <!-- Progress -->
-            <div class="tab-pane fade" id="pills-progress" role="tabpanel">
-                <div class="card p-2 p-md-3">
-                    <h6 class="text-primary fw-bold mb-3 border-bottom pb-2">متابعة الوزن والقياسات الأسبوعية</h6>
-                    <div class="table-responsive"><table class="table table-bordered align-middle" id="table-Progress"><thead><tr><th>الأسبوع</th><th>الوزن (كجم)</th><th>الخصر</th><th>أهم تقدم</th><th>ملاحظات</th></tr></thead><tbody></tbody></table></div>
-                </div>
-            </div>
+            <!-- Day Navigation -->
+            <ul class="day-nav-pills" id="dayTabs">
+                <li class="day-nav-item">
+                    <button class="day-nav-link active" data-day="A" onclick="switchDay('A')">
+                        <span class="day-tag">DAY A</span>
+                        <span class="day-count" id="count-badge-A">0/8</span>
+                    </button>
+                </li>
+                <li class="day-nav-item">
+                    <button class="day-nav-link" data-day="B" onclick="switchDay('B')">
+                        <span class="day-tag">DAY B</span>
+                        <span class="day-count" id="count-badge-B">0/9</span>
+                    </button>
+                </li>
+                <li class="day-nav-item">
+                    <button class="day-nav-link" data-day="C" onclick="switchDay('C')">
+                        <span class="day-tag">DAY C</span>
+                        <span class="day-count" id="count-badge-C">0/10</span>
+                    </button>
+                </li>
+                <li class="day-nav-item">
+                    <button class="day-nav-link" data-day="Progress" onclick="switchDay('Progress')">
+                        <span class="day-tag">القياسات</span>
+                        <span class="day-count"><i class="fa-solid fa-chart-line"></i></span>
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
 
-    <div class="floating-actions">
-        <button class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold bg-white shadow-sm" onclick="exportData()"><i class="fa-solid fa-download me-1"></i> Export Data</button>
-        <label class="btn btn-sm btn-outline-success rounded-pill px-3 fw-bold bg-white shadow-sm mb-0" style="cursor: pointer;">
-            <i class="fa-solid fa-upload me-1"></i> Import Data <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+    <!-- Main Content Container -->
+    <main class="container-app px-2 px-md-3 mt-3">
+
+        <!-- Day A Section -->
+        <div id="section-day-A" class="day-section">
+            <div class="day-summary-card">
+                <div>
+                    <h6 class="muscle-focus"><i class="fa-solid fa-fire text-danger me-1"></i> Glutes, Quads & Push</h6>
+                    <small class="text-muted">Day A • 8 تمارين أساسية</small>
+                </div>
+                <div class="progress-pill" id="day-progress-pill-A">0% مكتمل</div>
+            </div>
+
+            <!-- Mobile Cards Container -->
+            <div id="cards-container-A" class="cards-view-wrapper"></div>
+
+            <!-- Desktop Table View (Toggleable) -->
+            <div id="table-container-A" class="table-view-container">
+                <h6 class="fw-bold text-primary mb-2">جدول التمارين الكامل (Day A)</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle text-center" id="table-A">
+                        <thead class="table-light">
+                            <tr><th>التمرين</th><th>Set 1</th><th>Set 2</th><th>Set 3</th><th>RIR</th><th>ملاحظات</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day B Section -->
+        <div id="section-day-B" class="day-section" style="display: none;">
+            <div class="day-summary-card">
+                <div>
+                    <h6 class="muscle-focus"><i class="fa-solid fa-fire text-danger me-1"></i> Back, Hamstrings & Glutes</h6>
+                    <small class="text-muted">Day B • 9 تمارين أساسية</small>
+                </div>
+                <div class="progress-pill" id="day-progress-pill-B">0% مكتمل</div>
+            </div>
+
+            <div id="cards-container-B" class="cards-view-wrapper"></div>
+
+            <div id="table-container-B" class="table-view-container">
+                <h6 class="fw-bold text-primary mb-2">جدول التمارين الكامل (Day B)</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle text-center" id="table-B">
+                        <thead class="table-light">
+                            <tr><th>التمرين</th><th>Set 1</th><th>Set 2</th><th>Set 3</th><th>RIR</th><th>ملاحظات</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day C Section -->
+        <div id="section-day-C" class="day-section" style="display: none;">
+            <div class="day-summary-card">
+                <div>
+                    <h6 class="muscle-focus"><i class="fa-solid fa-fire text-danger me-1"></i> Glutes, Legs & Upper</h6>
+                    <small class="text-muted">Day C • 10 تمارين أساسية</small>
+                </div>
+                <div class="progress-pill" id="day-progress-pill-C">0% مكتمل</div>
+            </div>
+
+            <div id="cards-container-C" class="cards-view-wrapper"></div>
+
+            <div id="table-container-C" class="table-view-container">
+                <h6 class="fw-bold text-primary mb-2">جدول التمارين الكامل (Day C)</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle text-center" id="table-C">
+                        <thead class="table-light">
+                            <tr><th>التمرين</th><th>Set 1</th><th>Set 2</th><th>Set 3</th><th>RIR</th><th>ملاحظات</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress / Measurements Section -->
+        <div id="section-day-Progress" class="day-section" style="display: none;">
+            <div class="day-summary-card">
+                <div>
+                    <h6 class="muscle-focus"><i class="fa-solid fa-weight-scale text-primary me-1"></i> متابعة الوزن والقياسات</h6>
+                    <small class="text-muted">سجل قياساتك الأسبوعية لتقييم التقدم</small>
+                </div>
+            </div>
+
+            <div id="progress-cards-container"></div>
+
+            <div class="table-view-container" id="progress-table-container">
+                <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">جدول القياسات الكامل</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle" id="table-Progress">
+                        <thead class="table-light">
+                            <tr><th>الأسبوع</th><th>الوزن (كجم)</th><th>الخصر</th><th>أهم تقدم</th><th>ملاحظات</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Floating Bottom Bar -->
+    <div class="floating-bottom-bar">
+        <button class="floating-save-btn" onclick="saveAllData(true)">
+            <i class="fa-solid fa-floppy-disk"></i> حفظ التمرين
+        </button>
+        <button class="floating-action-btn" onclick="exportData()" title="تصدير نسخة احتياطية">
+            <i class="fa-solid fa-download"></i> تصدير
+        </button>
+        <label class="floating-action-btn mb-0" style="cursor: pointer;" title="استيراد نسخة احتياطية">
+            <i class="fa-solid fa-upload"></i> استيراد
+            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
         </label>
     </div>
 
+    <!-- Toast Alerts -->
     <div class="toast-container">
-        <div id="liveToast" class="toast align-items-center text-white bg-success border-0 shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="liveToast" class="toast align-items-center text-white bg-dark border-0 shadow-lg rounded-4" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
-                <div class="toast-body fw-bold py-2" id="toastMessage">Saved successfully!</div>
+                <div class="toast-body fw-bold py-3 px-3" id="toastMessage">
+                    <i class="fa-solid fa-circle-check text-success me-2"></i> تم الحفظ بنجاح!
+                </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
@@ -243,6 +870,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Exact workout program data preserved verbatim
         const exercisesData = {
             A: [
                 {name: "Smith Hip Thrust", sets: 3, reps: "8–12", focus: "Glutes"},
@@ -279,89 +907,812 @@
             ]
         };
 
-        function buildBaseTables() {
-            ['A', 'B', 'C'].forEach(day => {
-                const tbody = document.getElementById(`base-table-${day}`);
-                tbody.innerHTML = '';
-                exercisesData[day].forEach(ex => {
-                    let tr = document.createElement('tr');
-                    tr.innerHTML = `<td class="text-start fw-bold">${ex.name}</td><td>${ex.sets}</td><td>${ex.reps}</td><td><span class="badge bg-secondary">${ex.focus}</span></td>`;
-                    tbody.appendChild(tr);
-                });
-            });
+        // State variables
+        let currentDay = localStorage.getItem('gym_tracker_active_day') || 'A';
+        let currentWeek = localStorage.getItem('gym_tracker_active_week') || '1';
+        let currentViewMode = localStorage.getItem('gym_tracker_view_mode') || 'cards';
+        let autoSaveTimer = null;
+
+        // Parse and serialize set values with full backward compatibility
+        function parseSetValue(str) {
+            if (str === null || str === undefined) return { weight: '', reps: '', raw: '' };
+            str = String(str).trim();
+            if (!str) return { weight: '', reps: '', raw: '' };
+
+            // Match patterns like "50x10", "50 x 10", "50×10", "50 kg x 10", "50kg x 10", "50.5kg x 12"
+            const match = str.match(/^([0-9]+(?:\.[0-9]+)?)\s*(?:kg|كجم)?\s*(?:[x×*\/ -]\s*([0-9]+))?$/i);
+            if (match) {
+                return {
+                    weight: match[1] || '',
+                    reps: match[2] || '',
+                    raw: str
+                };
+            }
+
+            // Single number -> treat as weight
+            if (/^[0-9]+(?:\.[0-9]+)?$/.test(str)) {
+                return { weight: str, reps: '', raw: str };
+            }
+
+            return { weight: '', reps: '', raw: str };
         }
 
-        function buildTables() {
-            const currentWeek = document.getElementById('weekSelect').value;
-            ['A', 'B', 'C'].forEach(day => {
-                const tbody = document.querySelector(`#table-${day} tbody`);
-                tbody.innerHTML = '';
-                exercisesData[day].forEach((ex, idx) => {
-                    let tr = document.createElement('tr');
-                    let tdName = document.createElement('td');
-                    tdName.className = "exercise-name-cell";
-                    tdName.innerHTML = `<span class="badge bg-secondary me-1">${idx+1}</span> ${ex.name}`;
-                    tr.appendChild(tdName);
+        function formatSetValue(weight, reps, rawFallback = '') {
+            weight = (weight !== null && weight !== undefined) ? String(weight).trim() : '';
+            reps = (reps !== null && reps !== undefined) ? String(reps).trim() : '';
 
-                    for (let s = 1; s <= 3; s++) {
-                        let tdSet = document.createElement('td');
-                        if (s <= ex.sets) {
-                            let key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
-                            let val = localStorage.getItem(key) || '';
-                            tdSet.innerHTML = `<input type="text" class="form-control form-control-sm" placeholder="وزن×تكرار" data-key="${key}" value="${val}">`;
-                        } else {
-                            tdSet.innerHTML = `<span class="text-muted">—</span>`;
-                        }
-                        tr.appendChild(tdSet);
-                    }
+            if (weight && reps) {
+                return `${weight} × ${reps}`;
+            } else if (weight) {
+                return weight;
+            } else if (reps) {
+                return `× ${reps}`;
+            }
+            return rawFallback || '';
+        }
 
-                    let rirKey = `workout_${day}_w${currentWeek}_ex${idx}_rir`;
-                    let rirVal = localStorage.getItem(rirKey) || '';
-                    let tdRir = document.createElement('td');
-                    tdRir.innerHTML = `<input type="text" class="form-control form-control-sm" placeholder="RIR" data-key="${rirKey}" value="${rirVal}">`;
-                    tr.appendChild(tdRir);
+        // Switch Active Day
+        function switchDay(day) {
+            currentDay = day;
+            localStorage.setItem('gym_tracker_active_day', day);
 
-                    let noteKey = `workout_${day}_w${currentWeek}_ex${idx}_note`;
-                    let noteVal = localStorage.getItem(noteKey) || '';
-                    let tdNote = document.createElement('td');
-                    tdNote.innerHTML = `<input type="text" class="form-control form-control-sm" placeholder="ملاحظة" data-key="${noteKey}" value="${noteVal}">`;
-                    tr.appendChild(tdNote);
-
-                    tbody.appendChild(tr);
-                });
+            // Update Tab UI
+            document.querySelectorAll('.day-nav-link').forEach(btn => {
+                if (btn.getAttribute('data-day') === day) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
             });
 
-            const progressTbody = document.querySelector('#table-Progress tbody');
-            progressTbody.innerHTML = '';
-            for (let w = 1; w <= 8; w++) {
-                let tr = document.createElement('tr');
-                let tdWeek = document.createElement('td');
-                tdWeek.className = "fw-bold text-primary";
-                tdWeek.innerText = `أسبوع ${w}`;
-                tr.appendChild(tdWeek);
+            // Show matching section
+            ['A', 'B', 'C', 'Progress'].forEach(d => {
+                const sec = document.getElementById(`section-day-${d}`);
+                if (sec) {
+                    sec.style.display = (d === day) ? 'block' : 'none';
+                }
+            });
 
-                tr.appendChild(createInputTd(`prog_w${w}_weight`, 'كجم'));
-                tr.appendChild(createInputTd(`prog_w${w}_waist`, 'سم'));
-                tr.appendChild(createInputTd(`prog_w${w}_progress`, 'التقدم'));
-                tr.appendChild(createInputTd(`prog_w${w}_notes`, 'ملاحظات'));
-                progressTbody.appendChild(tr);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Switch View Mode (Cards vs Table)
+        function switchViewMode(mode) {
+            currentViewMode = mode;
+            localStorage.setItem('gym_tracker_view_mode', mode);
+
+            const btnCards = document.getElementById('btnViewCards');
+            const btnTable = document.getElementById('btnViewTable');
+
+            if (mode === 'cards') {
+                if (btnCards) btnCards.classList.add('active');
+                if (btnTable) btnTable.classList.remove('active');
+                document.querySelectorAll('.cards-view-wrapper').forEach(el => el.style.display = 'block');
+                document.querySelectorAll('.table-view-container').forEach(el => el.style.display = 'none');
+                const progCards = document.getElementById('progress-cards-container');
+                const progTable = document.getElementById('progress-table-container');
+                if (progCards) progCards.style.display = 'block';
+                if (progTable) progTable.style.display = 'none';
+            } else {
+                if (btnCards) btnCards.classList.remove('active');
+                if (btnTable) btnTable.classList.add('active');
+                document.querySelectorAll('.cards-view-wrapper').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.table-view-container').forEach(el => el.style.display = 'block');
+                const progCards = document.getElementById('progress-cards-container');
+                const progTable = document.getElementById('progress-table-container');
+                if (progCards) progCards.style.display = 'none';
+                if (progTable) progTable.style.display = 'block';
             }
         }
 
-        function createInputTd(key, placeholder) {
+        // Render Cards for a day
+        function renderCardsForDay(day) {
+            const container = document.getElementById(`cards-container-${day}`);
+            if (!container) return;
+            container.innerHTML = '';
+
+            const exercises = exercisesData[day];
+            let completedCount = 0;
+
+            exercises.forEach((ex, idx) => {
+                // Fetch current week's values
+                const setValues = [];
+                let hasAnyData = false;
+                let isExerciseComplete = true;
+
+                for (let s = 1; s <= ex.sets; s++) {
+                    const key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
+                    const val = localStorage.getItem(key) || '';
+                    const parsed = parseSetValue(val);
+                    setValues.push({ key, val, parsed });
+
+                    if (val) hasAnyData = true;
+                    if (!parsed.weight || !parsed.reps) {
+                        isExerciseComplete = false;
+                    }
+                }
+
+                const rirKey = `workout_${day}_w${currentWeek}_ex${idx}_rir`;
+                const rirVal = localStorage.getItem(rirKey) || '';
+                if (rirVal) hasAnyData = true;
+
+                const noteKey = `workout_${day}_w${currentWeek}_ex${idx}_note`;
+                const noteVal = localStorage.getItem(noteKey) || '';
+                if (noteVal) hasAnyData = true;
+
+                if (hasAnyData && isExerciseComplete) {
+                    completedCount++;
+                }
+
+                // Gather History from previous weeks (weeks < currentWeek)
+                const historyList = [];
+                for (let w = 1; w <= 8; w++) {
+                    if (w === parseInt(currentWeek)) continue;
+                    const weekSets = [];
+                    let weekHasData = false;
+                    for (let s = 1; s <= ex.sets; s++) {
+                        const prevKey = `workout_${day}_w${w}_ex${idx}_s${s}`;
+                        const prevVal = localStorage.getItem(prevKey) || '';
+                        if (prevVal) {
+                            weekHasData = true;
+                            weekSets.push(`م${s}: ${prevVal}`);
+                        }
+                    }
+                    const prevRirKey = `workout_${day}_w${w}_ex${idx}_rir`;
+                    const prevRirVal = localStorage.getItem(prevRirKey) || '';
+                    if (prevRirVal) weekHasData = true;
+
+                    const prevNoteKey = `workout_${day}_w${w}_ex${idx}_note`;
+                    const prevNoteVal = localStorage.getItem(prevNoteKey) || '';
+                    if (prevNoteVal) weekHasData = true;
+
+                    if (weekHasData) {
+                        historyList.push({
+                            week: w,
+                            setsSummary: weekSets.join(' | ') || '—',
+                            rir: prevRirVal,
+                            note: prevNoteVal
+                        });
+                    }
+                }
+
+                // Determine last previous performance
+                let lastPerfText = "لا يوجد أداء مسجل سابقاً";
+                if (historyList.length > 0) {
+                    const prevWeeks = historyList.filter(h => h.week < parseInt(currentWeek));
+                    const targetHist = (prevWeeks.length > 0) ? prevWeeks[prevWeeks.length - 1] : historyList[historyList.length - 1];
+                    lastPerfText = `أسبوع ${targetHist.week}: ${targetHist.setsSummary}${targetHist.rir ? ' — RIR ' + targetHist.rir : ''}`;
+                }
+
+                // Card DOM element
+                const card = document.createElement('div');
+                card.className = `exercise-card ${isExerciseComplete && hasAnyData ? 'is-completed' : ''}`;
+                card.id = `card-${day}-${idx}`;
+
+                // Status Badge
+                let statusBadgeHtml = '';
+                if (isExerciseComplete && hasAnyData) {
+                    statusBadgeHtml = '<span class="exercise-status-badge status-completed"><i class="fa-solid fa-circle-check me-1"></i> مكتمل</span>';
+                } else if (hasAnyData) {
+                    statusBadgeHtml = '<span class="exercise-status-badge status-inprogress"><i class="fa-solid fa-clock me-1"></i> قيد الإدخال</span>';
+                } else {
+                    statusBadgeHtml = '<span class="exercise-status-badge status-pending"><i class="fa-regular fa-circle me-1"></i> لم يبدأ</span>';
+                }
+
+                // Build Sets HTML
+                let setsHtml = '';
+                for (let s = 1; s <= ex.sets; s++) {
+                    const setInfo = setValues[s - 1];
+                    setsHtml += `
+                        <div class="set-row">
+                            <div class="set-label">مجموعة ${s}</div>
+                            <div class="input-group-custom">
+                                <input type="number" step="0.5" inputmode="decimal" enterkeyhint="next"
+                                    class="form-control-input set-weight-input" 
+                                    id="input-weight-${day}-${idx}-${s}"
+                                    data-day="${day}" data-idx="${idx}" data-set="${s}" data-key="${setInfo.key}"
+                                    placeholder="الوزن" value="${setInfo.parsed.weight || ''}" 
+                                    oninput="handleSetInput('${day}', ${idx}, ${s})"
+                                    onkeydown="handleInputKeydown(event, '${day}', ${idx}, ${s}, 'weight', ${ex.sets})"
+                                    autocomplete="off">
+                                <span class="input-unit-label">كجم</span>
+                            </div>
+                            <div class="input-group-custom">
+                                <input type="number" step="1" inputmode="numeric" enterkeyhint="${s < ex.sets ? 'next' : 'next'}"
+                                    class="form-control-input set-reps-input" 
+                                    id="input-reps-${day}-${idx}-${s}"
+                                    data-day="${day}" data-idx="${idx}" data-set="${s}" data-key="${setInfo.key}"
+                                    placeholder="تكرار" value="${setInfo.parsed.reps || ''}" 
+                                    oninput="handleSetInput('${day}', ${idx}, ${s})"
+                                    onkeydown="handleInputKeydown(event, '${day}', ${idx}, ${s}, 'reps', ${ex.sets})"
+                                    autocomplete="off">
+                                <span class="input-unit-label">عدات</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // History Section HTML
+                let historyAccordionHtml = '';
+                if (historyList.length > 0) {
+                    let historyRowsHtml = historyList.map(h => `
+                        <div class="history-week-row">
+                            <span class="history-week-name">أسبوع ${h.week}:</span>
+                            <span class="history-week-val">${h.setsSummary} ${h.rir ? ' • RIR ' + h.rir : ''} ${h.note ? ' (' + h.note + ')' : ''}</span>
+                        </div>
+                    `).join('');
+
+                    historyAccordionHtml = `
+                        <div class="history-box">
+                            <button type="button" class="history-toggle-btn" onclick="toggleHistoryAccordion('hist-${day}-${idx}')">
+                                <span><i class="fa-solid fa-clock-rotate-left me-1 text-primary"></i> السجل السابق (History)</span>
+                                <i class="fa-solid fa-chevron-down" id="hist-icon-${day}-${idx}"></i>
+                            </button>
+                            <div class="history-last-perf"><i class="fa-solid fa-arrow-left me-1"></i> ${lastPerfText}</div>
+                            <div class="history-details" id="hist-${day}-${idx}" style="display: none;">
+                                ${historyRowsHtml}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    historyAccordionHtml = `
+                        <div class="history-box py-2">
+                            <div class="text-muted small"><i class="fa-solid fa-info-circle me-1"></i> لا يوجد سجل سابق لهذا التمرين</div>
+                        </div>
+                    `;
+                }
+
+                // Next Exercise button target
+                const nextIdx = (idx + 1 < exercises.length) ? idx + 1 : 0;
+
+                card.innerHTML = `
+                    <div class="exercise-card-header">
+                        <div class="exercise-title-group">
+                            <span class="exercise-num-badge">${idx + 1}</span>
+                            <h5 class="exercise-title">${ex.name}</h5>
+                            <div class="exercise-badges">
+                                <span class="badge-focus">${ex.focus}</span>
+                                <span class="badge-target"><i class="fa-solid fa-bullseye me-1"></i> ${ex.sets} مجموعات × ${ex.reps} تكرار</span>
+                            </div>
+                        </div>
+                        <div>${statusBadgeHtml}</div>
+                    </div>
+
+                    ${historyAccordionHtml}
+
+                    <div class="sets-entry-container">
+                        <div class="sets-section-title">
+                            <span><i class="fa-solid fa-dumbbell text-secondary me-1"></i> تسجيل المجموعات (الأسبوع ${currentWeek}):</span>
+                            ${ex.sets > 1 ? `<button type="button" class="copy-all-btn" onclick="copySet1ToAll('${day}', ${idx}, ${ex.sets})"><i class="fa-solid fa-copy me-1"></i> نسخ م1 لباقي المجموعات</button>` : ''}
+                        </div>
+                        ${setsHtml}
+                    </div>
+
+                    <div class="exercise-meta-row">
+                        <div class="meta-field">
+                            <label for="input-rir-${day}-${idx}">
+                                <span><i class="fa-solid fa-gauge-simple-high me-1 text-warning"></i> RIR (المتبقي للفشل):</span>
+                            </label>
+                            <input type="number" step="0.5" min="0" max="10" inputmode="decimal" enterkeyhint="done"
+                                id="input-rir-${day}-${idx}" data-key="${rirKey}" 
+                                placeholder="RIR (0 - 4)" value="${rirVal}"
+                                oninput="handleRirInput('${day}', ${idx}, this.value)"
+                                onkeydown="handleRirKeydown(event, '${day}', ${idx})">
+                            <div class="rir-quick-pills">
+                                <span class="rir-pill ${rirVal === '0' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '0')">0</span>
+                                <span class="rir-pill ${rirVal === '0.5' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '0.5')">0.5</span>
+                                <span class="rir-pill ${rirVal === '1' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '1')">1</span>
+                                <span class="rir-pill ${rirVal === '1.5' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '1.5')">1.5</span>
+                                <span class="rir-pill ${rirVal === '2' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '2')">2</span>
+                                <span class="rir-pill ${rirVal === '3' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '3')">3</span>
+                            </div>
+                        </div>
+
+                        <div class="meta-field">
+                            <label for="input-note-${day}-${idx}">
+                                <span><i class="fa-regular fa-comment-dots me-1 text-info"></i> ملاحظات التمرين:</span>
+                            </label>
+                            <input type="text" id="input-note-${day}-${idx}" data-key="${noteKey}" 
+                                placeholder="مثلاً: خفيف، زيادة الأسبوع القادم..." value="${noteVal}"
+                                oninput="handleNoteInput('${day}', ${idx}, this.value)">
+                        </div>
+                    </div>
+
+                    <div class="exercise-card-actions">
+                        <button type="button" class="btn-card-save" onclick="saveCard('${day}', ${idx})">
+                            <i class="fa-solid fa-check"></i> حفظ التمرين
+                        </button>
+                        <button type="button" class="btn-card-next" onclick="scrollToExercise('${day}', ${nextIdx})">
+                            التالي <i class="fa-solid fa-arrow-down"></i>
+                        </button>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            // Update Day Badge & Progress
+            const total = exercises.length;
+            const badge = document.getElementById(`count-badge-${day}`);
+            if (badge) {
+                badge.innerText = `${completedCount}/${total}`;
+            }
+
+            const pill = document.getElementById(`day-progress-pill-${day}`);
+            if (pill) {
+                const percent = Math.round((completedCount / total) * 100);
+                pill.innerText = `${percent}% مكتمل`;
+                if (percent === 100) {
+                    pill.style.background = '#dcfce7';
+                    pill.style.color = '#15803d';
+                } else {
+                    pill.style.background = '#e0f2fe';
+                    pill.style.color = '#0369a1';
+                }
+            }
+        }
+
+        // Build Desktop Table View (Kept for 100% feature parity and large screens)
+        function buildDesktopTable(day) {
+            const tbody = document.querySelector(`#table-${day} tbody`);
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            exercisesData[day].forEach((ex, idx) => {
+                let tr = document.createElement('tr');
+                let tdName = document.createElement('td');
+                tdName.className = "exercise-name-cell";
+                tdName.innerHTML = `<span class="badge bg-secondary me-1">${idx+1}</span> ${ex.name} <br><small class="text-muted">${ex.focus} (${ex.sets}×${ex.reps})</small>`;
+                tr.appendChild(tdName);
+
+                for (let s = 1; s <= 3; s++) {
+                    let tdSet = document.createElement('td');
+                    if (s <= ex.sets) {
+                        let key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
+                        let val = localStorage.getItem(key) || '';
+                        tdSet.innerHTML = `<input type="text" class="form-control form-control-sm text-center" 
+                            placeholder="وزن×تكرار" data-key="${key}" value="${val}"
+                            oninput="syncTableInputToCards('${day}', ${idx}, ${s}, this.value)">`;
+                    } else {
+                        tdSet.innerHTML = `<span class="text-muted">—</span>`;
+                    }
+                    tr.appendChild(tdSet);
+                }
+
+                let rirKey = `workout_${day}_w${currentWeek}_ex${idx}_rir`;
+                let rirVal = localStorage.getItem(rirKey) || '';
+                let tdRir = document.createElement('td');
+                tdRir.innerHTML = `<input type="text" class="form-control form-control-sm text-center" 
+                    placeholder="RIR" data-key="${rirKey}" value="${rirVal}"
+                    oninput="syncTableRirToCards('${day}', ${idx}, this.value)">`;
+                tr.appendChild(tdRir);
+
+                let noteKey = `workout_${day}_w${currentWeek}_ex${idx}_note`;
+                let noteVal = localStorage.getItem(noteKey) || '';
+                let tdNote = document.createElement('td');
+                tdNote.innerHTML = `<input type="text" class="form-control form-control-sm" 
+                    placeholder="ملاحظة" data-key="${noteKey}" value="${noteVal}"
+                    oninput="syncTableNoteToCards('${day}', ${idx}, this.value)">`;
+                tr.appendChild(tdNote);
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Render Weekly Measurements / Progress Tab
+        function renderProgressSection() {
+            const cardsContainer = document.getElementById('progress-cards-container');
+            const tableBody = document.querySelector('#table-Progress tbody');
+
+            if (cardsContainer) cardsContainer.innerHTML = '';
+            if (tableBody) tableBody.innerHTML = '';
+
+            for (let w = 1; w <= 8; w++) {
+                const weightKey = `prog_w${w}_weight`;
+                const waistKey = `prog_w${w}_waist`;
+                const progressKey = `prog_w${w}_progress`;
+                const notesKey = `prog_w${w}_notes`;
+
+                const weightVal = localStorage.getItem(weightKey) || '';
+                const waistVal = localStorage.getItem(waistKey) || '';
+                const progressVal = localStorage.getItem(progressKey) || '';
+                const notesVal = localStorage.getItem(notesKey) || '';
+
+                // Progress Card (Mobile)
+                if (cardsContainer) {
+                    const card = document.createElement('div');
+                    card.className = 'progress-card';
+                    card.innerHTML = `
+                        <div class="progress-card-title">
+                            <span><i class="fa-solid fa-calendar-check text-primary me-1"></i> الأسبوع ${w}</span>
+                            ${w === parseInt(currentWeek) ? '<span class="badge bg-primary">الأسبوع الحالي</span>' : ''}
+                        </div>
+                        <div class="progress-grid">
+                            <div>
+                                <label class="small text-muted fw-bold mb-1">الوزن (كجم):</label>
+                                <input type="number" step="0.1" inputmode="decimal" data-key="${weightKey}" placeholder="مثلاً: 68.5" value="${weightVal}" oninput="handleProgressInput('${weightKey}', this.value)">
+                            </div>
+                            <div>
+                                <label class="small text-muted fw-bold mb-1">الخصر (سم):</label>
+                                <input type="number" step="0.5" inputmode="decimal" data-key="${waistKey}" placeholder="مثلاً: 75" value="${waistVal}" oninput="handleProgressInput('${waistKey}', this.value)">
+                            </div>
+                        </div>
+                        <div class="progress-full-width">
+                            <label class="small text-muted fw-bold mb-1">أهم تقدم وإنجاز:</label>
+                            <input type="text" data-key="${progressKey}" placeholder="مثلاً: زيادة وزن الهيب ثرست" value="${progressVal}" oninput="handleProgressInput('${progressKey}', this.value)">
+                        </div>
+                        <div class="progress-full-width">
+                            <label class="small text-muted fw-bold mb-1">ملاحظات عامة:</label>
+                            <input type="text" data-key="${notesKey}" placeholder="ملاحظات الأسبوع..." value="${notesVal}" oninput="handleProgressInput('${notesKey}', this.value)">
+                        </div>
+                    `;
+                    cardsContainer.appendChild(card);
+                }
+
+                // Table row (Desktop)
+                if (tableBody) {
+                    let tr = document.createElement('tr');
+                    let tdWeek = document.createElement('td');
+                    tdWeek.className = "fw-bold text-primary text-center";
+                    tdWeek.innerText = `أسبوع ${w}`;
+                    tr.appendChild(tdWeek);
+
+                    tr.appendChild(createTableInputTd(weightKey, 'كجم', weightVal));
+                    tr.appendChild(createTableInputTd(waistKey, 'سم', waistVal));
+                    tr.appendChild(createTableInputTd(progressKey, 'التقدم', progressVal));
+                    tr.appendChild(createTableInputTd(notesKey, 'ملاحظات', notesVal));
+                    tableBody.appendChild(tr);
+                }
+            }
+        }
+
+        function createTableInputTd(key, placeholder, val) {
             let td = document.createElement('td');
-            let val = localStorage.getItem(key) || '';
-            td.innerHTML = `<input type="text" class="form-control form-control-sm" placeholder="${placeholder}" data-key="${key}" value="${val}">`;
+            td.innerHTML = `<input type="text" class="form-control form-control-sm" placeholder="${placeholder}" data-key="${key}" value="${val}" oninput="handleProgressInput('${key}', this.value)">`;
             return td;
         }
 
-        function saveData() {
-            document.querySelectorAll('input[data-key]').forEach(input => {
-                localStorage.setItem(input.getAttribute('data-key'), input.value);
-            });
-            showToast("Saved successfully!");
+        // Live input handlers and auto-save
+        function handleSetInput(day, idx, s) {
+            const weightInput = document.getElementById(`input-weight-${day}-${idx}-${s}`);
+            const repsInput = document.getElementById(`input-reps-${day}-${idx}-${s}`);
+            const key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
+
+            const formatted = formatSetValue(weightInput.value, repsInput.value);
+            localStorage.setItem(key, formatted);
+
+            // Sync with desktop table input if exists
+            const tableInput = document.querySelector(`input[data-key="${key}"]`);
+            if (tableInput && tableInput !== weightInput && tableInput !== repsInput) {
+                tableInput.value = formatted;
+            }
+
+            triggerAutoSaveFeedback();
+            updateExerciseCardStatus(day, idx);
         }
 
+        function handleRirInput(day, idx, value) {
+            const key = `workout_${day}_w${currentWeek}_ex${idx}_rir`;
+            localStorage.setItem(key, value);
+
+            // Sync quick pills
+            const pills = document.querySelectorAll(`#card-${day}-${idx} .rir-pill`);
+            pills.forEach(p => {
+                p.classList.toggle('selected', p.innerText.trim() === value.trim());
+            });
+
+            const tableInput = document.querySelector(`input[data-key="${key}"]`);
+            if (tableInput) tableInput.value = value;
+
+            triggerAutoSaveFeedback();
+            updateExerciseCardStatus(day, idx);
+        }
+
+        function selectQuickRir(day, idx, val) {
+            const input = document.getElementById(`input-rir-${day}-${idx}`);
+            if (input) {
+                input.value = val;
+                handleRirInput(day, idx, val);
+            }
+        }
+
+        function handleNoteInput(day, idx, value) {
+            const key = `workout_${day}_w${currentWeek}_ex${idx}_note`;
+            localStorage.setItem(key, value);
+
+            const tableInput = document.querySelector(`input[data-key="${key}"]`);
+            if (tableInput) tableInput.value = value;
+
+            triggerAutoSaveFeedback();
+        }
+
+        function handleProgressInput(key, value) {
+            localStorage.setItem(key, value);
+            // Sync all inputs with this key
+            document.querySelectorAll(`input[data-key="${key}"]`).forEach(input => {
+                if (input.value !== value) input.value = value;
+            });
+            triggerAutoSaveFeedback();
+        }
+
+        // Quick action: Copy Set 1 to remaining sets
+        function copySet1ToAll(day, idx, totalSets) {
+            const s1Weight = document.getElementById(`input-weight-${day}-${idx}-1`).value;
+            const s1Reps = document.getElementById(`input-reps-${day}-${idx}-1`).value;
+
+            if (!s1Weight && !s1Reps) {
+                showToast("الرجاء إدخال بيانات المجموعة 1 أولاً!");
+                return;
+            }
+
+            for (let s = 2; s <= totalSets; s++) {
+                const wInput = document.getElementById(`input-weight-${day}-${idx}-${s}`);
+                const rInput = document.getElementById(`input-reps-${day}-${idx}-${s}`);
+                if (wInput) wInput.value = s1Weight;
+                if (rInput) rInput.value = s1Reps;
+
+                const key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
+                const formatted = formatSetValue(s1Weight, s1Reps);
+                localStorage.setItem(key, formatted);
+
+                const tableInput = document.querySelector(`input[data-key="${key}"]`);
+                if (tableInput) tableInput.value = formatted;
+            }
+
+            showToast(`تم نسخ بيانات المجموعة 1 لباقي المجموعات!`);
+            triggerAutoSaveFeedback();
+            updateExerciseCardStatus(day, idx);
+        }
+
+        // Dynamic Card Status Update
+        function updateExerciseCardStatus(day, idx) {
+            const ex = exercisesData[day][idx];
+            let isComplete = true;
+            let hasAny = false;
+
+            for (let s = 1; s <= ex.sets; s++) {
+                const wInput = document.getElementById(`input-weight-${day}-${idx}-${s}`);
+                const rInput = document.getElementById(`input-reps-${day}-${idx}-${s}`);
+                if ((wInput && wInput.value) || (rInput && rInput.value)) hasAny = true;
+                if (!wInput || !wInput.value || !rInput || !rInput.value) isComplete = false;
+            }
+
+            const rirInput = document.getElementById(`input-rir-${day}-${idx}`);
+            if (rirInput && rirInput.value) hasAny = true;
+
+            const card = document.getElementById(`card-${day}-${idx}`);
+            if (card) {
+                card.classList.toggle('is-completed', isComplete && hasAny);
+                const statusBadgeContainer = card.querySelector('.exercise-card-header > div:last-child');
+                if (statusBadgeContainer) {
+                    if (isComplete && hasAny) {
+                        statusBadgeContainer.innerHTML = '<span class="exercise-status-badge status-completed"><i class="fa-solid fa-circle-check me-1"></i> مكتمل</span>';
+                    } else if (hasAny) {
+                        statusBadgeContainer.innerHTML = '<span class="exercise-status-badge status-inprogress"><i class="fa-solid fa-clock me-1"></i> قيد الإدخال</span>';
+                    } else {
+                        statusBadgeContainer.innerHTML = '<span class="exercise-status-badge status-pending"><i class="fa-regular fa-circle me-1"></i> لم يبدأ</span>';
+                    }
+                }
+            }
+
+            // Update Day Badge
+            let completedCount = 0;
+            exercisesData[day].forEach((_, i) => {
+                const c = document.getElementById(`card-${day}-${i}`);
+                if (c && c.classList.contains('is-completed')) completedCount++;
+            });
+
+            const total = exercisesData[day].length;
+            const badge = document.getElementById(`count-badge-${day}`);
+            if (badge) badge.innerText = `${completedCount}/${total}`;
+
+            const pill = document.getElementById(`day-progress-pill-${day}`);
+            if (pill) {
+                const percent = Math.round((completedCount / total) * 100);
+                pill.innerText = `${percent}% مكتمل`;
+                if (percent === 100) {
+                    pill.style.background = '#dcfce7';
+                    pill.style.color = '#15803d';
+                } else {
+                    pill.style.background = '#e0f2fe';
+                    pill.style.color = '#0369a1';
+                }
+            }
+        }
+
+        // Scroll to exercise
+        function scrollToExercise(day, nextIdx) {
+            const nextCard = document.getElementById(`card-${day}-${nextIdx}`);
+            if (nextCard) {
+                const yOffset = -120;
+                const y = nextCard.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: 'smooth' });
+
+                // Focus first weight input
+                setTimeout(() => {
+                    const firstInput = document.getElementById(`input-weight-${day}-${nextIdx}-1`);
+                    if (firstInput) firstInput.focus();
+                }, 300);
+            }
+        }
+
+        // Toggle History Accordion
+        function toggleHistoryAccordion(id) {
+            const el = document.getElementById(id);
+            const iconId = id.replace('hist-', 'hist-icon-');
+            const icon = document.getElementById(iconId);
+
+            if (el.style.display === 'none' || !el.style.display) {
+                el.style.display = 'block';
+                if (icon) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+            } else {
+                el.style.display = 'none';
+                if (icon) {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            }
+        }
+
+        // Save card single
+        function saveCard(day, idx) {
+            const ex = exercisesData[day][idx];
+            for (let s = 1; s <= ex.sets; s++) {
+                const w = document.getElementById(`input-weight-${day}-${idx}-${s}`);
+                const r = document.getElementById(`input-reps-${day}-${idx}-${s}`);
+                if (w && r) {
+                    const key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
+                    const formatted = formatSetValue(w.value, r.value);
+                    localStorage.setItem(key, formatted);
+                    const tableInput = document.querySelector(`input[data-key="${key}"]`);
+                    if (tableInput) tableInput.value = formatted;
+                }
+            }
+            const rir = document.getElementById(`input-rir-${day}-${idx}`);
+            if (rir) {
+                const rirKey = `workout_${day}_w${currentWeek}_ex${idx}_rir`;
+                localStorage.setItem(rirKey, rir.value);
+                const tableInput = document.querySelector(`input[data-key="${rirKey}"]`);
+                if (tableInput) tableInput.value = rir.value;
+            }
+            const note = document.getElementById(`input-note-${day}-${idx}`);
+            if (note) {
+                const noteKey = `workout_${day}_w${currentWeek}_ex${idx}_note`;
+                localStorage.setItem(noteKey, note.value);
+                const tableInput = document.querySelector(`input[data-key="${noteKey}"]`);
+                if (tableInput) tableInput.value = note.value;
+            }
+
+            updateExerciseCardStatus(day, idx);
+
+            const card = document.getElementById(`card-${day}-${idx}`);
+            const saveBtn = card ? card.querySelector('.btn-card-save') : null;
+            if (saveBtn) {
+                const originalHtml = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> تم الحفظ!';
+                saveBtn.style.background = '#059669';
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalHtml;
+                    saveBtn.style.background = '';
+                }, 1200);
+            }
+
+            triggerAutoSaveFeedback("تم الحفظ بنجاح ✓");
+            showToast(`تم حفظ بيانات التمرين بنجاح! ✓`);
+        }
+
+        // Keyboard navigation handlers
+        function handleInputKeydown(e, day, idx, s, type, totalSets) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (type === 'weight') {
+                    const next = document.getElementById(`input-reps-${day}-${idx}-${s}`);
+                    if (next) next.focus();
+                } else if (type === 'reps') {
+                    if (s < totalSets) {
+                        const next = document.getElementById(`input-weight-${day}-${idx}-${s + 1}`);
+                        if (next) next.focus();
+                    } else {
+                        const rir = document.getElementById(`input-rir-${day}-${idx}`);
+                        if (rir) rir.focus();
+                    }
+                }
+            }
+        }
+
+        function handleRirKeydown(e, day, idx) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                saveCard(day, idx);
+                const nextIdx = (idx + 1 < exercisesData[day].length) ? idx + 1 : 0;
+                scrollToExercise(day, nextIdx);
+            }
+        }
+
+        // Save All Data (Preserved functionality)
+        function saveAllData(notify = true) {
+            // Save card inputs
+            ['A', 'B', 'C'].forEach(day => {
+                exercisesData[day].forEach((ex, idx) => {
+                    for (let s = 1; s <= ex.sets; s++) {
+                        const w = document.getElementById(`input-weight-${day}-${idx}-${s}`);
+                        const r = document.getElementById(`input-reps-${day}-${idx}-${s}`);
+                        if (w && r) {
+                            const key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
+                            localStorage.setItem(key, formatSetValue(w.value, r.value));
+                        }
+                    }
+                    const rir = document.getElementById(`input-rir-${day}-${idx}`);
+                    if (rir) {
+                        localStorage.setItem(`workout_${day}_w${currentWeek}_ex${idx}_rir`, rir.value);
+                    }
+                    const note = document.getElementById(`input-note-${day}-${idx}`);
+                    if (note) {
+                        localStorage.setItem(`workout_${day}_w${currentWeek}_ex${idx}_note`, note.value);
+                    }
+                });
+            });
+
+            // Save progress
+            document.querySelectorAll('#progress-cards-container input[data-key]').forEach(input => {
+                localStorage.setItem(input.getAttribute('data-key'), input.value);
+            });
+
+            if (notify) {
+                showToast("تم حفظ جميع التمارين بنجاح!");
+            }
+            triggerAutoSaveFeedback("تم الحفظ بنجاح ✓");
+        }
+
+        // Auto-save visual indicator
+        function triggerAutoSaveFeedback(text = "تم الحفظ تلقائياً ✓") {
+            const indicator = document.getElementById('saveStatusIndicator');
+            if (indicator) {
+                indicator.innerHTML = `<i class="fa-solid fa-check me-1"></i> ${text}`;
+                indicator.className = "badge bg-success";
+                clearTimeout(autoSaveTimer);
+                autoSaveTimer = setTimeout(() => {
+                    indicator.innerHTML = `<i class="fa-solid fa-cloud-arrow-up me-1"></i> جاهز`;
+                    indicator.className = "badge bg-success bg-opacity-75";
+                }, 2000);
+            }
+        }
+
+        // Desktop Table Sync Helpers
+        function syncTableInputToCards(day, idx, s, value) {
+            const key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
+            localStorage.setItem(key, value);
+            const parsed = parseSetValue(value);
+
+            const wInput = document.getElementById(`input-weight-${day}-${idx}-${s}`);
+            const rInput = document.getElementById(`input-reps-${day}-${idx}-${s}`);
+            if (wInput) wInput.value = parsed.weight;
+            if (rInput) rInput.value = parsed.reps;
+
+            triggerAutoSaveFeedback();
+            updateExerciseCardStatus(day, idx);
+        }
+
+        function syncTableRirToCards(day, idx, value) {
+            const key = `workout_${day}_w${currentWeek}_ex${idx}_rir`;
+            localStorage.setItem(key, value);
+            const rirInput = document.getElementById(`input-rir-${day}-${idx}`);
+            if (rirInput) rirInput.value = value;
+            triggerAutoSaveFeedback();
+        }
+
+        function syncTableNoteToCards(day, idx, value) {
+            const key = `workout_${day}_w${currentWeek}_ex${idx}_note`;
+            localStorage.setItem(key, value);
+            const noteInput = document.getElementById(`input-note-${day}-${idx}`);
+            if (noteInput) noteInput.value = value;
+            triggerAutoSaveFeedback();
+        }
+
+        // Export Functionality (100% format preserved)
         function exportData() {
             let backupData = {};
             for (let i = 0; i < localStorage.length; i++) {
@@ -375,12 +1726,19 @@
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
-            showToast("Data exported successfully!");
+            showToast("تم تصدير النسخة الاحتياطية بنجاح!");
         }
 
+        // Import Functionality (100% format preserved)
         function importData(event) {
             let file = event.target.files[0];
             if (!file) return;
+
+            if (!confirm("هل ترغب في استيراد البيانات؟ سيتم تحديث سجلات التمارين بالبيانات المستوردة.")) {
+                event.target.value = '';
+                return;
+            }
+
             let reader = new FileReader();
             reader.onload = function(e) {
                 try {
@@ -388,25 +1746,49 @@
                     Object.keys(backupData).forEach(key => {
                         localStorage.setItem(key, backupData[key]);
                     });
-                    buildTables();
-                    showToast("Data imported successfully!");
+                    renderAllViews();
+                    showToast("تم استيراد البيانات بنجاح!");
                 } catch(err) {
-                    alert("Invalid file!");
+                    alert("ملف غير صالح! تأكد من اختيار ملف JSON صحيح.");
                 }
             };
             reader.readAsText(file);
+            event.target.value = '';
         }
 
+        // Toast Helper
         function showToast(msg) {
-            document.getElementById('toastMessage').innerText = msg;
-            var toast = new bootstrap.Toast(document.getElementById('liveToast'));
+            const toastEl = document.getElementById('liveToast');
+            const toastBody = document.getElementById('toastMessage');
+            if (toastBody) toastBody.innerHTML = `<i class="fa-solid fa-circle-check text-success me-2"></i> ${msg}`;
+            const toast = new bootstrap.Toast(toastEl, { delay: 2500 });
             toast.show();
         }
 
-        document.getElementById('weekSelect').addEventListener('change', buildTables);
+        // Render all days & views
+        function renderAllViews() {
+            ['A', 'B', 'C'].forEach(day => {
+                renderCardsForDay(day);
+                buildDesktopTable(day);
+            });
+            renderProgressSection();
+            switchDay(currentDay);
+            switchViewMode(currentViewMode);
+        }
+
+        // Initialization
         window.addEventListener('DOMContentLoaded', () => {
-            buildBaseTables();
-            buildTables();
+            const weekSelect = document.getElementById('weekSelect');
+            if (weekSelect) {
+                weekSelect.value = currentWeek;
+                weekSelect.addEventListener('change', (e) => {
+                    currentWeek = e.target.value;
+                    localStorage.setItem('gym_tracker_active_week', currentWeek);
+                    renderAllViews();
+                });
+            }
+
+            renderAllViews();
         });
     </script>
 </body>
