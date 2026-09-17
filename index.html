@@ -532,6 +532,105 @@
             background: #e2e8f0;
         }
 
+        /* AI Analysis Buttons & Modal Styles */
+        .btn-card-ai {
+            width: 100%;
+            height: 42px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 50%, #4f46e5 100%);
+            border: 1px solid #6366f1;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.86rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(79, 70, 229, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+        .btn-card-ai:hover {
+            background: linear-gradient(135deg, #312e81 0%, #4338ca 50%, #6366f1 100%);
+            color: #ffffff;
+        }
+        .btn-card-ai:active {
+            transform: scale(0.98);
+        }
+
+        .btn-analyze-week {
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            border: 1.5px solid #6366f1;
+            color: #e0e7ff;
+            font-weight: 800;
+            font-size: 0.82rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+            transition: all 0.2s;
+        }
+        .btn-analyze-week:hover {
+            border-color: #818cf8;
+            color: #ffffff;
+        }
+        .btn-analyze-week:active {
+            transform: scale(0.98);
+        }
+
+        .ai-section-card {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1.5px solid #e2e8f0;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .ai-section-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #475569;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .ai-section-content {
+            font-size: 0.88rem;
+            color: #0f172a;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+        .ai-card-next {
+            background: #f0fdf4;
+            border-color: #86efac;
+        }
+        .ai-card-next .ai-section-title {
+            color: #15803d;
+        }
+        .ai-card-perf {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        .ai-perf-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-top: 3px;
+        }
+        .perf-progress { background: #dcfce7; color: #15803d; }
+        .perf-stable { background: #e0f2fe; color: #0369a1; }
+        .perf-regression { background: #fee2e2; color: #b91c1c; }
+        .perf-insufficient { background: #fef3c7; color: #b45309; }
+
         /* Floating Bottom Action Bar */
         .floating-bottom-bar {
             position: fixed;
@@ -706,6 +805,12 @@
                 </div>
             </div>
 
+            <div class="mb-2">
+                <button type="button" class="btn-analyze-week" onclick="openWeeklyAIAnalysis()">
+                    <i class="fa-solid fa-wand-magic-sparkles text-warning me-1"></i> 🤖 Analyze My Week (تحليل أداء الأسبوع)
+                </button>
+            </div>
+
             <!-- Day Navigation -->
             <ul class="day-nav-pills" id="dayTabs">
                 <li class="day-nav-item">
@@ -864,6 +969,31 @@
                     <i class="fa-solid fa-circle-check text-success me-2"></i> تم الحفظ بنجاح!
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Analysis Modal -->
+    <div class="modal fade" id="aiAnalysisModal" tabindex="-1" aria-labelledby="aiAnalysisModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header bg-dark text-white border-0 py-3">
+                    <h6 class="modal-title fw-bold d-flex align-items-center" id="aiAnalysisModalLabel">
+                        <i class="fa-solid fa-robot text-warning me-2 fs-5"></i> 🤖 AI Performance Analysis
+                    </h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                </div>
+                <div class="modal-body p-3 bg-light" id="aiAnalysisModalBody">
+                    <!-- Dynamic analysis cards inserted here -->
+                </div>
+                <div class="modal-footer bg-white border-0 py-2 d-flex justify-content-between">
+                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold" id="aiModalReanalyzeBtn">
+                        <i class="fa-solid fa-rotate-right me-1"></i> إعادة التحليل
+                    </button>
+                    <button type="button" class="btn btn-sm btn-secondary rounded-pill px-4 fw-bold" data-bs-dismiss="modal">
+                        إغلاق (Close)
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1218,13 +1348,18 @@
                         </div>
                     </div>
 
-                    <div class="exercise-card-actions">
-                        <button type="button" class="btn-card-save" onclick="saveCard('${day}', ${idx})">
-                            <i class="fa-solid fa-check"></i> حفظ التمرين
+                    <div class="exercise-card-actions-wrapper">
+                        <button type="button" class="btn-card-ai" onclick="openExerciseAIAnalysis('${day}', ${idx})">
+                            <i class="fa-solid fa-robot text-warning me-1"></i> 🤖 AI Analysis (تحليل الأداء)
                         </button>
-                        <button type="button" class="btn-card-next" onclick="scrollToExercise('${day}', ${nextIdx})">
-                            التالي <i class="fa-solid fa-arrow-down"></i>
-                        </button>
+                        <div class="exercise-card-actions mt-1">
+                            <button type="button" class="btn-card-save" onclick="saveCard('${day}', ${idx})">
+                                <i class="fa-solid fa-check"></i> حفظ التمرين
+                            </button>
+                            <button type="button" class="btn-card-next" onclick="scrollToExercise('${day}', ${nextIdx})">
+                                التالي <i class="fa-solid fa-arrow-down"></i>
+                            </button>
+                        </div>
                     </div>
                 `;
 
@@ -1774,6 +1909,429 @@
             renderProgressSection();
             switchDay(currentDay);
             switchViewMode(currentViewMode);
+        }
+
+        // ==========================================
+        // AI Analysis Engine & Modal Controllers
+        // ==========================================
+
+        function parseRepRange(repsStr) {
+            if (!repsStr) return { min: 8, max: 12 };
+            const match = repsStr.match(/(\d+)\s*[–\-]\s*(\d+)/);
+            if (match) {
+                return { min: parseInt(match[1]), max: parseInt(match[2]) };
+            }
+            const single = repsStr.match(/\d+/);
+            if (single) {
+                const val = parseInt(single[0]);
+                return { min: val, max: val };
+            }
+            return { min: 8, max: 12 };
+        }
+
+        function getExerciseWeekData(day, idx, weekNum) {
+            const ex = exercisesData[day][idx];
+            const sets = [];
+            for (let s = 1; s <= ex.sets; s++) {
+                const key = `workout_${day}_w${weekNum}_ex${idx}_s${s}`;
+                const val = localStorage.getItem(key) || '';
+                const parsed = parseSetValue(val);
+                sets.push({
+                    setNum: s,
+                    weight: parsed.weight,
+                    reps: parsed.reps,
+                    raw: val
+                });
+            }
+            const rirKey = `workout_${day}_w${weekNum}_ex${idx}_rir`;
+            const rirVal = localStorage.getItem(rirKey) || '';
+            const noteKey = `workout_${day}_w${weekNum}_ex${idx}_note`;
+            const noteVal = localStorage.getItem(noteKey) || '';
+
+            return {
+                weekNum,
+                sets,
+                rir: rirVal,
+                note: noteVal
+            };
+        }
+
+        function analyzeExercisePerformance({ exercise, currentWeekData, previousWeeksData, currentWeekNum }) {
+            const plannedTarget = parseRepRange(exercise.reps);
+            const validCurrentSets = currentWeekData.sets.filter(s => s && s.weight && s.reps);
+
+            if (validCurrentSets.length === 0) {
+                return {
+                    hasEnoughData: false,
+                    badgeClass: "perf-insufficient",
+                    performance: "بيانات غير كافية (Insufficient Data)",
+                    progress: "Not enough data to make a reliable assessment yet. (لم يتم تسجيل أوزان وتكرارات لهذا التمرين في الأسبوع الحالي بعد).",
+                    rir: currentWeekData.rir ? `تم تسجيل RIR ${currentWeekData.rir}، ولكن يلزم تسجيل الوزن والعدات لاكتمال التقييم.` : "لم يتم تسجيل الـ RIR بعد.",
+                    weight: "يرجى تسجيل الوزن المرفوع وعدد التكرارات المنجزة في المجموعات أولاً.",
+                    nextSession: "سجّل أداءك الفعلي أثناء التمرين ثم اضغط على زر التحليل للحصول على توصية دقيقة ومخصصة.",
+                    note: `البرنامج المخطط لهذا التمرين: ${exercise.sets} مجموعات × ${exercise.reps} تكرار (تركيز: ${exercise.focus}).`
+                };
+            }
+
+            const avgCurrentWeight = validCurrentSets.reduce((sum, s) => sum + parseFloat(s.weight), 0) / validCurrentSets.length;
+            const maxCurrentWeight = Math.max(...validCurrentSets.map(s => parseFloat(s.weight)));
+            const avgCurrentReps = validCurrentSets.reduce((sum, s) => sum + parseFloat(s.reps), 0) / validCurrentSets.length;
+            const currentRir = (currentWeekData.rir !== null && currentWeekData.rir !== '' && !isNaN(currentWeekData.rir)) ? parseFloat(currentWeekData.rir) : null;
+
+            const priorWeeksWithData = previousWeeksData
+                .filter(w => w.weekNum < currentWeekNum && w.sets && w.sets.filter(s => s && s.weight && s.reps).length > 0)
+                .sort((a, b) => b.weekNum - a.weekNum);
+
+            const prevWeek = priorWeeksWithData.length > 0 ? priorWeeksWithData[0] : null;
+
+            let performanceCategory = "";
+            let badgeClass = "perf-stable";
+            let progressText = "";
+            let weightText = "";
+            let rirText = "";
+            let nextSessionText = "";
+            let noteText = "";
+
+            if (!prevWeek) {
+                performanceCategory = "تسجيل أساسي للأداء (Baseline Session)";
+                badgeClass = "perf-stable";
+                progressText = `هذا هو السجل الأول لهذا التمرين في الأسبوع ${currentWeekNum}. تم تسجيل ${validCurrentSets.length} مجموعات بمتوسط وزن ${avgCurrentWeight.toFixed(1)} كجم ومتوسط ${Math.round(avgCurrentReps)} تكرار.`;
+
+                if (avgCurrentReps >= plannedTarget.min && avgCurrentReps <= plannedTarget.max) {
+                    weightText = `الوزن الحالي (${maxCurrentWeight} كجم) مناسب جداً ويقع ضمن المدى المستهدف (${exercise.reps} تكرار).`;
+                    nextSessionText = `حافظ على نفس الوزن (${maxCurrentWeight} كجم) في الجلسة القادمة، وركّز على زيادة عدد التكرارات تدريجياً نحو الحد الأعلى (${plannedTarget.max} تكرار) مع ثبات التكنيك.`;
+                } else if (avgCurrentReps > plannedTarget.max) {
+                    weightText = `الوزن الحالي (${maxCurrentWeight} كجم) خفيف نسبياً لأن التكرارات المنجزة (${Math.round(avgCurrentReps)}) تجاوزت المدى المستهدف (${exercise.reps}).`;
+                    nextSessionText = `يمكنك زيادة الوزن بمقدار طفيف (+2.5 كجم) في الجلسة القادمة لإعادة ضبط التكرارات داخل نطاق ${exercise.reps}.`;
+                } else {
+                    weightText = `الوزن الحالي (${maxCurrentWeight} كجم) ثقيل نوعاً ما لأن التكرارات المنجزة (${Math.round(avgCurrentReps)}) جاءت أقل من الحد الأدنى (${plannedTarget.min}).`;
+                    nextSessionText = `ثبّت الوزن الحالي وحاول الوصول إلى ${plannedTarget.min} تكرارات بمدى حركي كامل، أو خفف الوزن قليلاً إذا كان الـ RIR منخفضاً جداً.`;
+                }
+
+                noteText = `تأكد من الحفاظ على ثبات المسار الحركي والتحكم الكامل في الجزء السلبي (النزول) قبل التفكير في زيادة الأوزان.`;
+            } else {
+                const prevValidSets = prevWeek.sets.filter(s => s && s.weight && s.reps);
+                const maxPrevWeight = Math.max(...prevValidSets.map(s => parseFloat(s.weight)));
+                const avgPrevReps = prevValidSets.reduce((sum, s) => sum + parseFloat(s.reps), 0) / prevValidSets.length;
+
+                const weightDiff = maxCurrentWeight - maxPrevWeight;
+                const repsDiff = avgCurrentReps - avgPrevReps;
+
+                if (weightDiff > 0) {
+                    if (avgCurrentReps >= plannedTarget.min) {
+                        performanceCategory = "تطور ممتاز في الحمل (Progress - Increased Load)";
+                        badgeClass = "perf-progress";
+                        progressText = `تم رفع الوزن من ${maxPrevWeight} كجم في أسبوع ${prevWeek.weekNum} إلى ${maxCurrentWeight} كجم (+${weightDiff} كجم). انخفاض التكرارات بمقدار (${repsDiff.toFixed(1)}) طبيعي ومتوقع مع زيادة الحمل طالما ظل داخل المدى المستهدف (${exercise.reps}).`;
+                        weightText = `الوزن الجديد (${maxCurrentWeight} كجم) مناسب تماماً ويتوافق مع مبدأ التدرج في الحمل (Progressive Overload).`;
+                        nextSessionText = `ثبّت الوزن على (${maxCurrentWeight} كجم) في الجلسة القادمة وحاول زيادة التكرارات تدريجياً للوصول إلى الحد الأعلى (${plannedTarget.max} تكرار) قبل التفكير في زيادة الوزن مجدداً.`;
+                    } else {
+                        performanceCategory = "زيادة وزن مبكرة (Premature Load Increase)";
+                        badgeClass = "perf-insufficient";
+                        progressText = `تمت زيادة الوزن من ${maxPrevWeight} كجم إلى ${maxCurrentWeight} كجم، ولكن التكرارات انخفضت إلى ${Math.round(avgCurrentReps)} وهو أقل من المدى المستهدف (${exercise.reps}).`;
+                        weightText = `الوزن الحالي (${maxCurrentWeight} كجم) قد يكون ثقيلاً قليلاً في هذه المرحلة، ولا يمنح العضلة الحجم التدريبي الكافي.`;
+                        nextSessionText = `يُفضل الحفاظ على هذا الوزن لمحاولة إكمال ${plannedTarget.min} تكرارات، أو العودة لوزن ${maxPrevWeight} كجم وتخطي ${plannedTarget.max} تكرار أولاً بتكنيك ممتاز.`;
+                    }
+                } else if (weightDiff === 0) {
+                    if (repsDiff >= 1) {
+                        performanceCategory = "تطور في الكفاءة والتكرارات (Progress - Repetition Increase)";
+                        badgeClass = "perf-progress";
+                        progressText = `تطور واضح في التكرارات مقارنة بأسبوع ${prevWeek.weekNum}: حققت زيادة بمتوسط +${Math.round(repsDiff)} تكرار على نفس الوزن (${maxCurrentWeight} كجم).`;
+                        if (avgCurrentReps >= plannedTarget.max) {
+                            weightText = `الوزن الحالي (${maxCurrentWeight} كجم) أصبح مريحاً لأنك بلغت الحد الأقصى للمدى المستهدف (${plannedTarget.max} تكرار).`;
+                            nextSessionText = `أنت جاهز لزيادة الوزن بمقدار طفيف (+2.5 كجم) في الجلسة القادمة مع توقع هبوط التكرارات إلى بداية المدى (${plannedTarget.min}).`;
+                        } else {
+                            weightText = `الوزن الحالي (${maxCurrentWeight} كجم) ملائم جداً ويسمح بتطور مستمر.`;
+                            nextSessionText = `استمر على نفس الوزن (${maxCurrentWeight} كجم) وحاول الوصول للحد الأعلى (${plannedTarget.max} تكرار) في كافة المجموعات.`;
+                        }
+                    } else if (repsDiff > -1 && repsDiff < 1) {
+                        performanceCategory = "أداء مستقر (Stable Performance)";
+                        badgeClass = "perf-stable";
+                        progressText = `أداء مطابق ومستقر مقارنة بأسبوع ${prevWeek.weekNum}: نفس الوزن (${maxCurrentWeight} كجم) ونفس التكرارات تقريباً (${Math.round(avgCurrentReps)} عدات).`;
+                        weightText = `الوزن الحالي مناسب لتثبيت القوة، ولكن يلزم محاولة دفع التكرارات خطوة للأمام.`;
+                        nextSessionText = `في الجلسة القادمة، استهدف إضافة تكرار واحد إضافي على الأقل في المجموعة الأولى مع الحفاظ على نفس الوزن.`;
+                    } else {
+                        performanceCategory = "تراجع طفيف أو إجهاد (Slight Regression / Fatigue)";
+                        badgeClass = "perf-regression";
+                        progressText = `انخفضت التكرارات بمقدار (${Math.abs(repsDiff).toFixed(1)}) مقارنة بأسبوع ${prevWeek.weekNum} على نفس الوزن (${maxCurrentWeight} كجم). قد يعود ذلك لإجهاد بدني، أو قلة النوم، أو ترتيب التمرين في الحصة.`;
+                        weightText = `لا تقم بزيادة الوزن حالياً حتى يستقر الأداء وتعود التكرارات للمعدل السابق.`;
+                        nextSessionText = `حافظ على نفس الوزن (${maxCurrentWeight} كجم)، مع الاهتمام بالراحة الكافية بين المجموعات (دقيقتين إلى 3 دقائق).`;
+                    }
+                } else {
+                    performanceCategory = "تعديل الوزن للأسفل (Reduced Load / Deload)";
+                    badgeClass = "perf-stable";
+                    progressText = `تم تقليل الوزن من ${maxPrevWeight} كجم إلى ${maxCurrentWeight} كجم. التكرارات الحالية (${Math.round(avgCurrentReps)}) تقع ${avgCurrentReps >= plannedTarget.min ? 'ضمن' : 'خارج'} المدى المطلوب.`;
+                    weightText = `تقليل الوزن خطوة ذكية إذا كان الهدف تحسين جودة الحركة والتحكم العضلي أو تفادي إجهاد المفاصل.`;
+                    nextSessionText = `ركز على التكنيك الدقيق والنزول البطيء (Eccentric tempo) مع هذا الوزن قبل معاودة رفعه.`;
+                }
+
+                noteText = `عضلة التركيز المستهدفة: (${exercise.focus}). احرص على العزل العضلي الممتاز والمدى الكامل في كل عدة.`;
+            }
+
+            if (currentRir !== null) {
+                if (currentRir === 0) {
+                    rirText = `RIR 0 (وصول للفشل التام): جهد أقصى وشاق جداً بدون أي تكرارات متبقية. ممتاز لتحفيز الألياف العضلية، ولكن يُفضل عدم تكرار الفشل التام في كل مجموعة لتجنب إجهاد الجهاز العصبي.`;
+                } else if (currentRir <= 1) {
+                    rirText = `RIR ${currentRir} (شديد وصعب): جهد تدريبي مثالي وفعال جداً للبناء العضلي (المتبقي تكرار واحد في الاحتياط). يدل على كثافة تدريبية ممتازة لتحفيز النمو العضلي.`;
+                } else if (currentRir === 2) {
+                    rirText = `RIR 2 (مثالي ومتوازن): نقطة ذهبية توازن بين التحفيز العضلي العالي وسرعة الاستشفاء للأسبوع القادم.`;
+                } else if (currentRir >= 3) {
+                    rirText = `RIR ${currentRir} (خفيف نسبياً): يشير إلى بقاء 3 تكرارات أو أكثر في الاحتياط. إذا كان التكنيك مستقراً، يمكنك زيادة الشدة قليلاً في الأسبوع القادم.`;
+                }
+            } else {
+                rirText = `لم يتم تسجيل RIR لهذا التمرين. تسجيل الـ RIR (المتبقي للفشل) يساعد الذكاء الاصطناعي في تحديد ما إذا كان الوزن خفيفاً أو قريباً من الفشل بدقة عالية.`;
+            }
+
+            return {
+                hasEnoughData: true,
+                badgeClass,
+                performance: performanceCategory,
+                progress: progressText,
+                rir: rirText,
+                weight: weightText,
+                nextSession: nextSessionText,
+                note: noteText
+            };
+        }
+
+        function openExerciseAIAnalysis(day, idx) {
+            saveCard(day, idx);
+
+            const ex = exercisesData[day][idx];
+            const modalEl = document.getElementById('aiAnalysisModal');
+            const modalTitle = document.getElementById('aiAnalysisModalLabel');
+            const modalBody = document.getElementById('aiAnalysisModalBody');
+            const reanalyzeBtn = document.getElementById('aiModalReanalyzeBtn');
+
+            modalTitle.innerHTML = `<i class="fa-solid fa-robot text-warning me-2 fs-5"></i> 🤖 AI Analysis • ${ex.name}`;
+            reanalyzeBtn.onclick = () => openExerciseAIAnalysis(day, idx);
+
+            modalBody.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary mb-3" role="status" style="width: 2.8rem; height: 2.8rem;"></div>
+                    <h6 class="fw-bold text-dark">Analyzing your performance...</h6>
+                    <p class="text-muted small mb-0">جاري فحص الأوزان والتكرارات والـ RIR ومقارنتها بالسجل التدريبي...</p>
+                </div>
+            `;
+
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modalInstance.show();
+
+            setTimeout(() => {
+                const currentWeekNum = parseInt(currentWeek);
+                const currentWeekData = getExerciseWeekData(day, idx, currentWeekNum);
+                
+                const previousWeeksData = [];
+                for (let w = 1; w <= 8; w++) {
+                    if (w !== currentWeekNum) {
+                        previousWeeksData.push(getExerciseWeekData(day, idx, w));
+                    }
+                }
+
+                const analysis = analyzeExercisePerformance({
+                    exercise: ex,
+                    currentWeekData,
+                    previousWeeksData,
+                    currentWeekNum
+                });
+
+                modalBody.innerHTML = `
+                    <div class="ai-section-card ai-card-perf">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-chart-line text-primary"></i> <strong>Performance (الأداء العام):</strong>
+                        </div>
+                        <div class="ai-section-content">
+                            <span class="ai-perf-badge ${analysis.badgeClass} mb-2">${analysis.performance}</span>
+                        </div>
+                    </div>
+
+                    <div class="ai-section-card">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-arrow-trend-up text-success"></i> <strong>Progress (التقدم والتطور):</strong>
+                        </div>
+                        <div class="ai-section-content">${analysis.progress}</div>
+                    </div>
+
+                    <div class="ai-section-card">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-gauge-simple-high text-warning"></i> <strong>RIR (تقييم شدة الجهد):</strong>
+                        </div>
+                        <div class="ai-section-content">${analysis.rir}</div>
+                    </div>
+
+                    <div class="ai-section-card">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-weight-hanging text-info"></i> <strong>Weight (مناسبة الوزن):</strong>
+                        </div>
+                        <div class="ai-section-content">${analysis.weight}</div>
+                    </div>
+
+                    <div class="ai-section-card ai-card-next">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-forward-step text-success"></i> <strong>Next Session (توصية التمرين القادم):</strong>
+                        </div>
+                        <div class="ai-section-content fw-bold text-dark">${analysis.nextSession}</div>
+                    </div>
+
+                    <div class="ai-section-card">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-lightbulb text-secondary"></i> <strong>Note (ملاحظة فنية):</strong>
+                        </div>
+                        <div class="ai-section-content text-muted">${analysis.note}</div>
+                    </div>
+                `;
+            }, 350);
+        }
+
+        function analyzeWeeklyWorkout({ currentWeekNum }) {
+            let totalExercises = 0;
+            let completedExercises = 0;
+            const improvedList = [];
+            const stableList = [];
+            const attentionList = [];
+            const rirValues = [];
+
+            ['A', 'B', 'C'].forEach(day => {
+                exercisesData[day].forEach((ex, idx) => {
+                    totalExercises++;
+                    const curr = getExerciseWeekData(day, idx, currentWeekNum);
+                    const prev = getExerciseWeekData(day, idx, currentWeekNum - 1);
+
+                    const currValidSets = curr.sets.filter(s => s && s.weight && s.reps);
+                    if (currValidSets.length > 0) {
+                        completedExercises++;
+                        if (curr.rir !== null && curr.rir !== '' && !isNaN(curr.rir)) {
+                            rirValues.push(parseFloat(curr.rir));
+                        }
+
+                        if (prev && prev.sets && prev.sets.filter(s => s && s.weight && s.reps).length > 0) {
+                            const prevValidSets = prev.sets.filter(s => s && s.weight && s.reps);
+                            const currMaxW = Math.max(...currValidSets.map(s => parseFloat(s.weight)));
+                            const prevMaxW = Math.max(...prevValidSets.map(s => parseFloat(s.weight)));
+                            const currAvgR = currValidSets.reduce((sum, s) => sum + parseFloat(s.reps), 0) / currValidSets.length;
+                            const prevAvgR = prevValidSets.reduce((sum, s) => sum + parseFloat(s.reps), 0) / prevValidSets.length;
+
+                            const weightDiff = currMaxW - prevMaxW;
+                            const repsDiff = currAvgR - prevAvgR;
+
+                            if (weightDiff > 0) {
+                                improvedList.push({ name: ex.name, day, change: `زيادة وزن من ${prevMaxW} إلى ${currMaxW} كجم (+${weightDiff} كجم)` });
+                            } else if (weightDiff === 0 && repsDiff >= 1) {
+                                improvedList.push({ name: ex.name, day, change: `زيادة تكرارات بمتوسط +${Math.round(repsDiff)} عدات على وزن ${currMaxW} كجم` });
+                            } else if (weightDiff === 0 && Math.abs(repsDiff) < 1) {
+                                stableList.push({ name: ex.name, day, change: `ثبات الوزن (${currMaxW} كجم × ${Math.round(currAvgR)} تكرار)` });
+                            } else if (weightDiff < 0 || repsDiff <= -1.5) {
+                                attentionList.push({ name: ex.name, day, change: weightDiff < 0 ? `انخفاض الوزن من ${prevMaxW} إلى ${currMaxW} كجم` : `انخفاض التكرارات (${repsDiff.toFixed(1)} عدات)` });
+                            }
+                        }
+                    }
+                });
+            });
+
+            if (completedExercises === 0) {
+                return {
+                    hasEnoughData: false,
+                    overallProgress: "Not enough data to make a reliable assessment yet. (لم يتم تسجيل أي تمارين مكتملة لهذا الأسبوع التدريبي بعد).",
+                    whatImproved: "لا توجد بيانات مسجلة لهذا الأسبوع حتى الآن.",
+                    whatNeedsAttention: "سجّل تمارينك اليومية أولاً ثم أعد الضغط على زر التحليل.",
+                    trainingEffort: "غير متاح بدون تسجيل معدل الجهد RIR.",
+                    nextWeekFocus: "التزم بتسجيل المجموعات والـ RIR لكل يوم تدريبي للحصول على تحليل أسبوعي شامل ودقيق."
+                };
+            }
+
+            let overallProgressText = `تم تسجيل ${completedExercises} من أصل ${totalExercises} تمريناً في الأسبوع ${currentWeekNum}. `;
+            if (improvedList.length > 0) {
+                overallProgressText += `أظهر البرنامج تطوراً إيجابياً في ${improvedList.length} تمريناً، مع ثبات واستقرار في ${stableList.length} تمريناً.`;
+            } else {
+                overallProgressText += `ركز هذا الأسبوع على تثبيت الأوزان وضبط جودة التكنيك والتحكم في الحركة.`;
+            }
+
+            let effortText = "لم يتم تسجيل الـ RIR في معظم التمارين.";
+            if (rirValues.length > 0) {
+                const avgRir = rirValues.reduce((a, b) => a + b, 0) / rirValues.length;
+                if (avgRir <= 1.2) {
+                    effortText = `متوسط RIR الأسبوعي (${avgRir.toFixed(1)}): شدة تدريبية مرتفعة جداً وقريبة من الفشل العضلي. تحفيز قوي للألياف ولكن احرص على أخذ قسط كافٍ من النوم والتغذية الجيدة لتجنب الإرهاق.`;
+                } else if (avgRir <= 2.2) {
+                    effortText = `متوسط RIR الأسبوعي (${avgRir.toFixed(1)}): جهد تدريبي مثالي ومتوازن جداً للبناء العضلي (Hypertrophy Sweet Spot). يحقق نمواً ممتازاً مع الحفاظ على قدرة الاستشفاء.`;
+                } else {
+                    effortText = `متوسط RIR الأسبوعي (${avgRir.toFixed(1)}): الجهد العام معتدل إلى خفيف (أكثر من تكرارين في الاحتياط). يمكنك زيادة الشدة تدريجياً في الأسبوع القادم في التمارين الأساسية.`;
+                }
+            }
+
+            let nextWeekText = `1. ركّز على زيادة تكرارات التمارين المستقرة (${stableList.length} تمارين) للوصول لأعلى المدى المحدد.\n2. التمارين التي تحسنت هذا الأسبوع، ثبّت وزنها الجديد لتأكيد السيطرة الحركية الكاملة.\n3. التمارين التي شهدت انخفاضاً، تأكد من أخذ راحة كافية (دقيقتين إلى 3 دقائق) قبل مجموعاتها.`;
+
+            return {
+                hasEnoughData: true,
+                overallProgress: overallProgressText,
+                whatImproved: improvedList.length > 0 ? improvedList.map(i => `• ${i.name} (Day ${i.day}): ${i.change}`).join('\n') : "لا توجد زيادات كبيرة في الأوزان/العدات هذا الأسبوع (أسبوع تثبيت).",
+                whatNeedsAttention: attentionList.length > 0 ? attentionList.map(a => `• ${a.name} (Day ${a.day}): ${a.change}`).join('\n') : "لا توجد تمارين سجلت تراجعاً ملحوظاً، أداء ممتاز ومتوازن!",
+                trainingEffort: effortText,
+                nextWeekFocus: nextWeekText
+            };
+        }
+
+        function openWeeklyAIAnalysis() {
+            saveAllData(false);
+
+            const modalEl = document.getElementById('aiAnalysisModal');
+            const modalTitle = document.getElementById('aiAnalysisModalLabel');
+            const modalBody = document.getElementById('aiAnalysisModalBody');
+            const reanalyzeBtn = document.getElementById('aiModalReanalyzeBtn');
+
+            modalTitle.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles text-warning me-2 fs-5"></i> 🤖 Weekly AI Summary • أسبوع ${currentWeek}`;
+            reanalyzeBtn.onclick = () => openWeeklyAIAnalysis();
+
+            modalBody.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary mb-3" role="status" style="width: 2.8rem; height: 2.8rem;"></div>
+                    <h6 class="fw-bold text-dark">Analyzing your week...</h6>
+                    <p class="text-muted small mb-0">جاري فحص جميع التمارين المكتملة وحساب معدلات التقدم والـ RIR للأسبوع...</p>
+                </div>
+            `;
+
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modalInstance.show();
+
+            setTimeout(() => {
+                const currentWeekNum = parseInt(currentWeek);
+                const summary = analyzeWeeklyWorkout({ currentWeekNum });
+
+                modalBody.innerHTML = `
+                    <div class="ai-section-card ai-card-perf">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-calendar-check text-primary"></i> <strong>Overall Progress (التقدم العام):</strong>
+                        </div>
+                        <div class="ai-section-content">${summary.overallProgress}</div>
+                    </div>
+
+                    <div class="ai-section-card">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-circle-arrow-up text-success"></i> <strong>What Improved (التمارين المتطورة):</strong>
+                        </div>
+                        <div class="ai-section-content text-success fw-bold">${summary.whatImproved}</div>
+                    </div>
+
+                    <div class="ai-section-card">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-triangle-exclamation text-warning"></i> <strong>What Needs Attention (تمارين تحتاج تركيز):</strong>
+                        </div>
+                        <div class="ai-section-content text-dark">${summary.whatNeedsAttention}</div>
+                    </div>
+
+                    <div class="ai-section-card">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-gauge-simple-high text-info"></i> <strong>Training Effort (مستوى الجهد والـ RIR):</strong>
+                        </div>
+                        <div class="ai-section-content">${summary.trainingEffort}</div>
+                    </div>
+
+                    <div class="ai-section-card ai-card-next">
+                        <div class="ai-section-title">
+                            <i class="fa-solid fa-bullseye text-success"></i> <strong>Next Week Focus (خطة الأسبوع القادم):</strong>
+                        </div>
+                        <div class="ai-section-content fw-bold">${summary.nextWeekFocus}</div>
+                    </div>
+                `;
+            }, 350);
         }
 
         // Initialization
