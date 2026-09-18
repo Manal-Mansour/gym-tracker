@@ -98,6 +98,31 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
         }
 
+        .btn-toggle-gifs {
+            border: 1.5px solid #cbd5e1;
+            background: #ffffff;
+            color: #334155;
+            font-size: 0.78rem;
+            font-weight: 700;
+            height: 42px;
+            padding: 0 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-toggle-gifs:active {
+            transform: scale(0.97);
+        }
+        .btn-toggle-gifs.active {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-color: #93c5fd;
+        }
+
         .view-mode-toggle {
             display: flex;
             background: #e2e8f0;
@@ -207,78 +232,136 @@
         /* Exercise Cards */
         .exercise-card {
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 18px;
             border: 1.5px solid var(--border-color);
             box-shadow: 0 3px 12px rgba(0,0,0,0.03);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             padding: 14px 14px 12px;
             transition: all 0.2s ease;
         }
         .exercise-card.is-completed {
             border-color: #86efac;
-            background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 40px);
+            background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 45px);
         }
 
+        /* Exercise Card Header with GIF Thumbnail */
         .exercise-card-header {
             display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 10px;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
         }
+        .exercise-gif-wrapper {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #f1f5f9;
+            border: 1.5px solid #e2e8f0;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .exercise-gif-wrapper:active {
+            transform: scale(0.95);
+        }
+        .exercise-gif-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .gif-expand-badge {
+            position: absolute;
+            bottom: 2px;
+            left: 2px;
+            background: rgba(15, 23, 42, 0.75);
+            color: white;
+            font-size: 0.58rem;
+            font-weight: 700;
+            padding: 1px 4px;
+            border-radius: 4px;
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            pointer-events: none;
+        }
+        body.hide-gifs .exercise-gif-wrapper {
+            display: none !important;
+        }
+
         .exercise-title-group {
             flex: 1;
+            min-width: 0;
+        }
+        .exercise-header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .exercise-title-subgroup {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
         }
         .exercise-num-badge {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 26px;
-            height: 26px;
-            border-radius: 8px;
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+            border-radius: 7px;
             background: #e2e8f0;
             color: #334155;
-            font-size: 0.78rem;
+            font-size: 0.74rem;
             font-weight: 800;
-            margin-left: 6px;
         }
         .exercise-title {
-            font-size: 1.05rem;
+            font-size: 0.98rem;
             font-weight: 800;
             color: var(--text-dark);
             margin: 0;
-            display: inline-block;
-            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .exercise-badges {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 5px;
+            align-items: center;
+            gap: 4px;
         }
         .badge-focus {
             background: #eff6ff;
             color: #1d4ed8;
             font-weight: 700;
-            font-size: 0.75rem;
-            padding: 3px 8px;
+            font-size: 0.7rem;
+            padding: 2px 7px;
             border-radius: 6px;
         }
         .badge-target {
             background: #f1f5f9;
             color: #475569;
             font-weight: 600;
-            font-size: 0.75rem;
-            padding: 3px 8px;
+            font-size: 0.7rem;
+            padding: 2px 7px;
             border-radius: 6px;
         }
 
         .exercise-status-badge {
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             font-weight: 800;
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 20px;
             white-space: nowrap;
+            flex-shrink: 0;
         }
         .status-completed {
             background: #dcfce7;
@@ -293,49 +376,58 @@
             color: #64748b;
         }
 
-        /* History Accordion */
-        .history-box {
+        /* Compact History Strip */
+        .history-compact-strip {
             background: #f8fafc;
-            border-radius: 12px;
-            border: 1px dashed #cbd5e1;
-            padding: 8px 12px;
-            margin-bottom: 12px;
-        }
-        .history-toggle-btn {
-            background: transparent;
-            border: none;
-            padding: 0;
-            width: 100%;
-            text-align: right;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            padding: 5px 10px;
+            margin-bottom: 8px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #475569;
+            justify-content: space-between;
+            font-size: 0.74rem;
             cursor: pointer;
+            transition: background 0.15s;
         }
-        .history-last-perf {
-            font-size: 0.78rem;
+        .history-compact-strip:active {
+            background: #f1f5f9;
+        }
+        .history-compact-label {
             color: #0284c7;
             font-weight: 700;
-            margin-top: 4px;
-            padding-top: 4px;
-            border-top: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             direction: ltr;
             text-align: right;
         }
-        .history-details {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid #e2e8f0;
-            font-size: 0.78rem;
+        .history-chevron {
+            color: #94a3b8;
+            font-size: 0.7rem;
+            transition: transform 0.2s;
+        }
+        .history-chevron.open {
+            transform: rotate(180deg);
+        }
+        .history-details-drawer {
+            margin-top: -4px;
+            margin-bottom: 8px;
+            padding: 6px 10px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            font-size: 0.74rem;
         }
         .history-week-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 4px 0;
+            padding: 3px 0;
             border-bottom: 1px dotted #e2e8f0;
         }
         .history-week-row:last-child {
@@ -351,12 +443,15 @@
             direction: ltr;
         }
 
-        /* Set Entry Rows */
+        /* Streamlined Set Entry Rows */
+        .sets-entry-container {
+            margin-top: 4px;
+        }
         .sets-section-title {
-            font-size: 0.82rem;
+            font-size: 0.76rem;
             font-weight: 800;
             color: #475569;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -366,47 +461,50 @@
             border: 1px solid #cbd5e1;
             color: var(--brand-primary);
             font-weight: 700;
-            font-size: 0.72rem;
-            padding: 2px 8px;
-            border-radius: 8px;
+            font-size: 0.7rem;
+            padding: 2px 7px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .copy-all-btn:hover {
+        .copy-all-btn:active {
             background: #e2e8f0;
         }
 
         .set-row {
             display: grid;
-            grid-template-columns: 60px 1fr 1fr;
-            gap: 8px;
+            grid-template-columns: 46px 1fr 1fr;
+            gap: 6px;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .set-label {
-            font-size: 0.8rem;
-            font-weight: 700;
+            font-size: 0.76rem;
+            font-weight: 800;
             color: #475569;
             background: #f1f5f9;
-            padding: 8px 4px;
+            height: 40px;
             border-radius: 8px;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .input-group-custom {
             position: relative;
         }
         .input-group-custom input {
             width: 100%;
-            height: 44px;
+            height: 40px;
             font-size: 16px; /* Prevents auto-zoom on iOS */
             font-weight: 700;
             text-align: center;
             border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
+            border-radius: 8px;
             background: #ffffff;
             color: var(--text-dark);
-            padding: 6px;
+            padding: 4px 6px;
             direction: ltr;
+            transition: border-color 0.15s, box-shadow 0.15s;
         }
         .input-group-custom input:focus {
             outline: none;
@@ -416,148 +514,190 @@
         }
         .input-unit-label {
             position: absolute;
-            left: 8px;
+            left: 6px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             color: #94a3b8;
             pointer-events: none;
         }
 
-        /* RIR and Notes */
-        .exercise-meta-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 10px;
-            margin-bottom: 12px;
+        /* Decluttered Secondary Controls: Single-line RIR + Collapsible Notes */
+        .card-secondary-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid #f8fafc;
         }
-        @media (max-width: 480px) {
-            .exercise-meta-row {
-                grid-template-columns: 1fr;
-            }
-        }
-        .meta-field label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #475569;
-            margin-bottom: 4px;
+        .rir-compact-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 6px;
         }
-        .meta-field input {
-            width: 100%;
-            height: 42px;
-            font-size: 16px;
-            font-weight: 600;
-            border: 1.5px solid #cbd5e1;
-            border-radius: 10px;
-            padding: 6px 10px;
+        .rir-compact-label {
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #475569;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 3px;
         }
-        .meta-field input:focus {
-            outline: none;
-            border-color: var(--accent-blue);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
-
-        .rir-quick-pills {
+        .rir-pills-bar {
             display: flex;
             gap: 4px;
-            margin-top: 4px;
-            overflow-x: auto;
+            flex: 1;
         }
         .rir-pill {
+            flex: 1;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border: 1px solid #cbd5e1;
             background: #f8fafc;
             color: #334155;
-            font-size: 0.72rem;
+            font-size: 0.76rem;
             font-weight: 700;
-            padding: 3px 6px;
             border-radius: 6px;
             cursor: pointer;
-            flex: 1;
-            text-align: center;
+            transition: all 0.15s ease;
+        }
+        .rir-pill:active {
+            transform: scale(0.95);
         }
         .rir-pill.selected {
             background: var(--brand-primary);
             color: white;
             border-color: var(--brand-primary);
+            box-shadow: 0 2px 5px rgba(30, 60, 114, 0.25);
+        }
+        .rir-custom-input-box {
+            display: none;
+            width: 54px;
+        }
+        .rir-custom-input-box input {
+            width: 100%;
+            height: 30px;
+            border: 1.5px solid var(--accent-blue);
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            direction: ltr;
         }
 
-        /* Card Action Buttons */
+        /* Collapsible Note */
+        .note-toggle-btn {
+            background: transparent;
+            border: none;
+            padding: 2px 0;
+            font-size: 0.73rem;
+            font-weight: 700;
+            color: #64748b;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            width: fit-content;
+        }
+        .note-toggle-btn:hover, .note-toggle-btn:active {
+            color: var(--brand-primary);
+        }
+        .note-input-container {
+            margin-top: 2px;
+        }
+        .note-input-container input {
+            width: 100%;
+            height: 32px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 4px 8px;
+        }
+        .note-input-container input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        /* Unified Card Bottom Action Bar */
         .exercise-card-actions {
             display: flex;
-            gap: 8px;
-            margin-top: 12px;
-            padding-top: 10px;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding-top: 8px;
             border-top: 1px solid #f1f5f9;
         }
-        .btn-card-save {
-            flex: 2;
-            height: 44px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border: none;
-            color: white;
-            font-weight: 700;
-            font-size: 0.9rem;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-card-save:active {
-            transform: scale(0.98);
-        }
-        .btn-card-next {
-            flex: 1;
-            height: 44px;
-            background: #f1f5f9;
-            border: 1.5px solid #cbd5e1;
-            color: #334155;
-            font-weight: 700;
-            font-size: 0.85rem;
-            border-radius: 10px;
+        .btn-card-ai {
+            flex: 1.1;
+            height: 38px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 50%, #4f46e5 100%);
+            border: 1px solid #6366f1;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.76rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 4px;
             cursor: pointer;
-        }
-        .btn-card-next:active {
-            background: #e2e8f0;
-        }
-
-        /* AI Analysis Buttons & Modal Styles */
-        .btn-card-ai {
-            width: 100%;
-            height: 42px;
-            background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 50%, #4f46e5 100%);
-            border: 1px solid #6366f1;
-            color: #ffffff;
-            font-weight: 800;
-            font-size: 0.86rem;
-            border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(79, 70, 229, 0.25);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            cursor: pointer;
-            margin-top: 8px;
-            margin-bottom: 8px;
-            transition: all 0.2s ease;
+            white-space: nowrap;
+            padding: 0 6px;
+            transition: all 0.15s ease;
         }
         .btn-card-ai:hover {
             background: linear-gradient(135deg, #312e81 0%, #4338ca 50%, #6366f1 100%);
             color: #ffffff;
         }
         .btn-card-ai:active {
-            transform: scale(0.98);
+            transform: scale(0.97);
+        }
+        .btn-card-save {
+            flex: 1.2;
+            height: 38px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: white;
+            font-weight: 800;
+            font-size: 0.8rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+            padding: 0 6px;
+            transition: all 0.15s;
+        }
+        .btn-card-save:active {
+            transform: scale(0.97);
+        }
+        .btn-card-next {
+            width: 40px;
+            height: 38px;
+            flex-shrink: 0;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            font-weight: 700;
+            font-size: 0.82rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-card-next:active {
+            background: #e2e8f0;
         }
 
         .btn-analyze-week {
@@ -795,6 +935,9 @@
                         <option value="8">الأسبوع الثامن (Week 8)</option>
                     </select>
                 </div>
+                <button type="button" class="btn-toggle-gifs active" id="btnToggleGifs" onclick="toggleGifsVisibility()" title="إظهار أو إخفاء صور التمارين">
+                    <i class="fa-solid fa-photo-film me-1"></i> <span id="gifToggleText">الصور</span>
+                </button>
                 <div class="view-mode-toggle d-none d-md-flex">
                     <button type="button" class="view-mode-btn active" id="btnViewCards" onclick="switchViewMode('cards')">
                         <i class="fa-solid fa-layer-group me-1"></i> بطاقات
@@ -998,42 +1141,90 @@
         </div>
     </div>
 
+    <!-- Exercise Technique GIF Lightbox Modal -->
+    <div class="modal fade" id="exerciseGifModal" tabindex="-1" aria-labelledby="exerciseGifModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="modal-header bg-dark text-white border-0 py-2 px-3">
+                    <h6 class="modal-title fw-bold d-flex align-items-center" id="exerciseGifModalLabel">
+                        <i class="fa-solid fa-play text-warning me-2"></i> <span id="gifModalTitle">شرح التمرين</span>
+                    </h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                </div>
+                <div class="modal-body p-0 text-center bg-black">
+                    <div style="min-height: 240px; display: flex; align-items: center; justify-content: center; background: #0b0f19;">
+                        <img id="gifModalImage" src="" alt="شرح أداء التمرين" class="img-fluid" style="max-height: 340px; width: 100%; object-fit: contain;">
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 py-2 px-3 d-flex justify-content-between">
+                    <div class="d-flex align-items-center gap-1">
+                        <span id="gifModalFocusBadge" class="badge-focus">العضلة المستهدفة</span>
+                        <span id="gifModalTargetBadge" class="badge-target">المجموعات</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-secondary rounded-pill px-3 fw-bold" data-bs-dismiss="modal">
+                        إغلاق
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Exact workout program data preserved verbatim
+        // Exercise animated demonstration GIFs database (verified CDN endpoints)
+        const EXERCISE_GIFS = {
+            "Smith Hip Thrust": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/glutes/barbell-glute-bridge-two-legs-on-bench-male.gif",
+            "Leg Press": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/glutes/sled-45-leg-press.gif",
+            "Chest Press": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/pectorals/lever-chest-press.gif",
+            "Lat Pulldown": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/lats/cable-lat-pulldown-full-range-of-motion.gif",
+            "Leg Extension": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/quads/lever-leg-extension.gif",
+            "Leg Outer": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/abductors/lever-seated-hip-abduction.gif",
+            "Cable Triceps": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/triceps/cable-pushdown-with-rope-attachment.gif",
+            "Abdominal Machine": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/abs/lever-seated-crunch-chest-pad.gif",
+            "Leg Curl": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/hamstrings/lever-kneeling-leg-curl.gif",
+            "Mid Row": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/upper-back/cable-seated-row.gif",
+            "Chest-Supported Row 45°": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/upper-back/lever-t-bar-row.gif",
+            "Back Extension": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/spine/hyperextension.gif",
+            "Rear Delt / Pec Fly": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/delts/lever-seated-reverse-fly-parallel-grip.gif",
+            "Cable Biceps": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/biceps/cable-curl.gif",
+            "Captain Chair Knee Raise": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/abs/captains-chair-straight-leg-raise.gif",
+            "Shoulder Press": "https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/delts/dumbbell-standing-overhead-press.gif"
+        };
+
+        // Exact workout program data preserved verbatim with GIF integration
         const exercisesData = {
             A: [
-                {name: "Smith Hip Thrust", sets: 3, reps: "8–12", focus: "Glutes"},
-                {name: "Leg Press", sets: 3, reps: "10–12", focus: "Quads + Glutes"},
-                {name: "Chest Press", sets: 3, reps: "8–12", focus: "Chest"},
-                {name: "Lat Pulldown", sets: 3, reps: "8–12", focus: "Back"},
-                {name: "Leg Extension", sets: 2, reps: "12–15", focus: "Quads"},
-                {name: "Leg Outer", sets: 2, reps: "15–20", focus: "Glute medius"},
-                {name: "Cable Triceps", sets: 2, reps: "10–15", focus: "Triceps"},
-                {name: "Abdominal Machine", sets: 2, reps: "12–15", focus: "Core"}
+                {name: "Smith Hip Thrust", sets: 3, reps: "8–12", focus: "Glutes", gif: EXERCISE_GIFS["Smith Hip Thrust"]},
+                {name: "Leg Press", sets: 3, reps: "10–12", focus: "Quads + Glutes", gif: EXERCISE_GIFS["Leg Press"]},
+                {name: "Chest Press", sets: 3, reps: "8–12", focus: "Chest", gif: EXERCISE_GIFS["Chest Press"]},
+                {name: "Lat Pulldown", sets: 3, reps: "8–12", focus: "Back", gif: EXERCISE_GIFS["Lat Pulldown"]},
+                {name: "Leg Extension", sets: 2, reps: "12–15", focus: "Quads", gif: EXERCISE_GIFS["Leg Extension"]},
+                {name: "Leg Outer", sets: 2, reps: "15–20", focus: "Glute medius", gif: EXERCISE_GIFS["Leg Outer"]},
+                {name: "Cable Triceps", sets: 2, reps: "10–15", focus: "Triceps", gif: EXERCISE_GIFS["Cable Triceps"]},
+                {name: "Abdominal Machine", sets: 2, reps: "12–15", focus: "Core", gif: EXERCISE_GIFS["Abdominal Machine"]}
             ],
             B: [
-                {name: "Leg Curl", sets: 3, reps: "10–15", focus: "Hamstrings"},
-                {name: "Smith Hip Thrust", sets: 3, reps: "10–12", focus: "Glutes"},
-                {name: "Mid Row", sets: 3, reps: "8–12", focus: "Back"},
-                {name: "Lat Pulldown", sets: 2, reps: "10–12", focus: "Back"},
-                {name: "Chest-Supported Row 45°", sets: 2, reps: "10–12", focus: "Back"},
-                {name: "Back Extension", sets: 2, reps: "12–15", focus: "Glutes + Hams"},
-                {name: "Rear Delt / Pec Fly", sets: 2, reps: "12–15", focus: "Rear Delts"},
-                {name: "Cable Biceps", sets: 2, reps: "10–15", focus: "Biceps"},
-                {name: "Captain Chair Knee Raise", sets: 2, reps: "10–15", focus: "Core"}
+                {name: "Leg Curl", sets: 3, reps: "10–15", focus: "Hamstrings", gif: EXERCISE_GIFS["Leg Curl"]},
+                {name: "Smith Hip Thrust", sets: 3, reps: "10–12", focus: "Glutes", gif: EXERCISE_GIFS["Smith Hip Thrust"]},
+                {name: "Mid Row", sets: 3, reps: "8–12", focus: "Back", gif: EXERCISE_GIFS["Mid Row"]},
+                {name: "Lat Pulldown", sets: 2, reps: "10–12", focus: "Back", gif: EXERCISE_GIFS["Lat Pulldown"]},
+                {name: "Chest-Supported Row 45°", sets: 2, reps: "10–12", focus: "Back", gif: EXERCISE_GIFS["Chest-Supported Row 45°"]},
+                {name: "Back Extension", sets: 2, reps: "12–15", focus: "Glutes + Hams", gif: EXERCISE_GIFS["Back Extension"]},
+                {name: "Rear Delt / Pec Fly", sets: 2, reps: "12–15", focus: "Rear Delts", gif: EXERCISE_GIFS["Rear Delt / Pec Fly"]},
+                {name: "Cable Biceps", sets: 2, reps: "10–15", focus: "Biceps", gif: EXERCISE_GIFS["Cable Biceps"]},
+                {name: "Captain Chair Knee Raise", sets: 2, reps: "10–15", focus: "Core", gif: EXERCISE_GIFS["Captain Chair Knee Raise"]}
             ],
             C: [
-                {name: "Leg Press", sets: 3, reps: "10–15", focus: "Quads + Glutes"},
-                {name: "Smith Hip Thrust", sets: 2, reps: "8–12", focus: "Glutes"},
-                {name: "Leg Curl", sets: 2, reps: "10–15", focus: "Hamstrings"},
-                {name: "Chest Press", sets: 2, reps: "8–12", focus: "Chest"},
-                {name: "Mid Row", sets: 2, reps: "8–12", focus: "Back"},
-                {name: "Shoulder Press", sets: 2, reps: "8–12", focus: "Shoulders"},
-                {name: "Leg Outer", sets: 2, reps: "15–20", focus: "Glute medius"},
-                {name: "Cable Triceps", sets: 2, reps: "10–15", focus: "Triceps"},
-                {name: "Cable Biceps", sets: 2, reps: "10–15", focus: "Biceps"},
-                {name: "Abdominal Machine", sets: 2, reps: "12–15", focus: "Core"}
+                {name: "Leg Press", sets: 3, reps: "10–15", focus: "Quads + Glutes", gif: EXERCISE_GIFS["Leg Press"]},
+                {name: "Smith Hip Thrust", sets: 2, reps: "8–12", focus: "Glutes", gif: EXERCISE_GIFS["Smith Hip Thrust"]},
+                {name: "Leg Curl", sets: 2, reps: "10–15", focus: "Hamstrings", gif: EXERCISE_GIFS["Leg Curl"]},
+                {name: "Chest Press", sets: 2, reps: "8–12", focus: "Chest", gif: EXERCISE_GIFS["Chest Press"]},
+                {name: "Mid Row", sets: 2, reps: "8–12", focus: "Back", gif: EXERCISE_GIFS["Mid Row"]},
+                {name: "Shoulder Press", sets: 2, reps: "8–12", focus: "Shoulders", gif: EXERCISE_GIFS["Shoulder Press"]},
+                {name: "Leg Outer", sets: 2, reps: "15–20", focus: "Glute medius", gif: EXERCISE_GIFS["Leg Outer"]},
+                {name: "Cable Triceps", sets: 2, reps: "10–15", focus: "Triceps", gif: EXERCISE_GIFS["Cable Triceps"]},
+                {name: "Cable Biceps", sets: 2, reps: "10–15", focus: "Biceps", gif: EXERCISE_GIFS["Cable Biceps"]},
+                {name: "Abdominal Machine", sets: 2, reps: "12–15", focus: "Core", gif: EXERCISE_GIFS["Abdominal Machine"]}
             ]
         };
 
@@ -1041,6 +1232,7 @@
         let currentDay = localStorage.getItem('gym_tracker_active_day') || 'A';
         let currentWeek = localStorage.getItem('gym_tracker_active_week') || '1';
         let currentViewMode = localStorage.getItem('gym_tracker_view_mode') || 'cards';
+        let showExerciseGifs = localStorage.getItem('gym_tracker_show_gifs') !== 'false';
         let autoSaveTimer = null;
 
         // Parse and serialize set values with full backward compatibility
@@ -1273,21 +1465,15 @@
                     `).join('');
 
                     historyAccordionHtml = `
-                        <div class="history-box">
-                            <button type="button" class="history-toggle-btn" onclick="toggleHistoryAccordion('hist-${day}-${idx}')">
-                                <span><i class="fa-solid fa-clock-rotate-left me-1 text-primary"></i> السجل السابق (History)</span>
-                                <i class="fa-solid fa-chevron-down" id="hist-icon-${day}-${idx}"></i>
-                            </button>
-                            <div class="history-last-perf"><i class="fa-solid fa-arrow-left me-1"></i> ${lastPerfText}</div>
-                            <div class="history-details" id="hist-${day}-${idx}" style="display: none;">
-                                ${historyRowsHtml}
+                        <div class="history-compact-strip" onclick="toggleHistoryDrawer('hist-${day}-${idx}')">
+                            <div class="history-compact-label">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <span>السابق: ${lastPerfText}</span>
                             </div>
+                            <i class="fa-solid fa-chevron-down history-chevron" id="hist-icon-${day}-${idx}"></i>
                         </div>
-                    `;
-                } else {
-                    historyAccordionHtml = `
-                        <div class="history-box py-2">
-                            <div class="text-muted small"><i class="fa-solid fa-info-circle me-1"></i> لا يوجد سجل سابق لهذا التمرين</div>
+                        <div class="history-details-drawer" id="hist-${day}-${idx}" style="display: none;">
+                            ${historyRowsHtml}
                         </div>
                     `;
                 }
@@ -1297,69 +1483,81 @@
 
                 card.innerHTML = `
                     <div class="exercise-card-header">
+                        <div class="exercise-gif-wrapper" onclick="openExerciseGifModal('${day}', ${idx})" title="اضغط لتكبير وشرح الحركة">
+                            <img src="${ex.gif}" alt="${ex.name}" class="exercise-gif-thumb" loading="lazy" onerror="handleGifError(this)">
+                            <span class="gif-expand-badge"><i class="fa-solid fa-expand"></i></span>
+                        </div>
                         <div class="exercise-title-group">
-                            <span class="exercise-num-badge">${idx + 1}</span>
-                            <h5 class="exercise-title">${ex.name}</h5>
+                            <div class="exercise-header-top">
+                                <div class="exercise-title-subgroup">
+                                    <span class="exercise-num-badge">${idx + 1}</span>
+                                    <h6 class="exercise-title" title="${ex.name}">${ex.name}</h6>
+                                </div>
+                                <div class="exercise-status-container">${statusBadgeHtml}</div>
+                            </div>
                             <div class="exercise-badges">
                                 <span class="badge-focus">${ex.focus}</span>
-                                <span class="badge-target"><i class="fa-solid fa-bullseye me-1"></i> ${ex.sets} مجموعات × ${ex.reps} تكرار</span>
+                                <span class="badge-target"><i class="fa-solid fa-bullseye me-1"></i> ${ex.sets}م × ${ex.reps}</span>
                             </div>
                         </div>
-                        <div>${statusBadgeHtml}</div>
                     </div>
 
                     ${historyAccordionHtml}
 
                     <div class="sets-entry-container">
                         <div class="sets-section-title">
-                            <span><i class="fa-solid fa-dumbbell text-secondary me-1"></i> تسجيل المجموعات (الأسبوع ${currentWeek}):</span>
+                            <span><i class="fa-solid fa-dumbbell text-secondary me-1"></i> المجموعات (الأسبوع ${currentWeek}):</span>
                             ${ex.sets > 1 ? `<button type="button" class="copy-all-btn" onclick="copySet1ToAll('${day}', ${idx}, ${ex.sets})"><i class="fa-solid fa-copy me-1"></i> نسخ م1 لباقي المجموعات</button>` : ''}
                         </div>
                         ${setsHtml}
                     </div>
 
-                    <div class="exercise-meta-row">
-                        <div class="meta-field">
-                            <label for="input-rir-${day}-${idx}">
-                                <span><i class="fa-solid fa-gauge-simple-high me-1 text-warning"></i> RIR (المتبقي للفشل):</span>
-                            </label>
-                            <input type="number" step="0.5" min="0" max="10" inputmode="decimal" enterkeyhint="done"
-                                id="input-rir-${day}-${idx}" data-key="${rirKey}" 
-                                placeholder="RIR (0 - 4)" value="${rirVal}"
-                                oninput="handleRirInput('${day}', ${idx}, this.value)"
-                                onkeydown="handleRirKeydown(event, '${day}', ${idx})">
-                            <div class="rir-quick-pills">
+                    <div class="card-secondary-controls">
+                        <div class="rir-compact-row">
+                            <div class="rir-compact-label">
+                                <i class="fa-solid fa-gauge-simple-high text-warning"></i> RIR:
+                            </div>
+                            <div class="rir-pills-bar">
                                 <span class="rir-pill ${rirVal === '0' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '0')">0</span>
-                                <span class="rir-pill ${rirVal === '0.5' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '0.5')">0.5</span>
                                 <span class="rir-pill ${rirVal === '1' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '1')">1</span>
-                                <span class="rir-pill ${rirVal === '1.5' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '1.5')">1.5</span>
                                 <span class="rir-pill ${rirVal === '2' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '2')">2</span>
                                 <span class="rir-pill ${rirVal === '3' ? 'selected' : ''}" onclick="selectQuickRir('${day}', ${idx}, '3')">3</span>
+                                <span class="rir-pill ${rirVal && !['0','1','2','3'].includes(rirVal) ? 'selected' : ''}" onclick="toggleCustomRir('${day}', ${idx})" id="rir-pill-custom-${day}-${idx}">
+                                    ${rirVal && !['0','1','2','3'].includes(rirVal) ? rirVal : '✏️'}
+                                </span>
                             </div>
+                            <input type="number" step="0.5" min="0" max="10" inputmode="decimal"
+                                id="input-rir-${day}-${idx}" data-key="${rirKey}" 
+                                placeholder="RIR" value="${rirVal}"
+                                style="${rirVal && !['0','1','2','3'].includes(rirVal) ? 'width: 52px; height: 30px;' : 'display: none; width: 52px; height: 30px;'}"
+                                class="form-control form-control-sm text-center fw-bold"
+                                oninput="handleRirInput('${day}', ${idx}, this.value)"
+                                onkeydown="handleRirKeydown(event, '${day}', ${idx})">
                         </div>
 
-                        <div class="meta-field">
-                            <label for="input-note-${day}-${idx}">
-                                <span><i class="fa-regular fa-comment-dots me-1 text-info"></i> ملاحظات التمرين:</span>
-                            </label>
-                            <input type="text" id="input-note-${day}-${idx}" data-key="${noteKey}" 
-                                placeholder="مثلاً: خفيف، زيادة الأسبوع القادم..." value="${noteVal}"
-                                oninput="handleNoteInput('${day}', ${idx}, this.value)">
+                        <div class="note-section-wrapper">
+                            <button type="button" class="note-toggle-btn" onclick="toggleExerciseNote('${day}', ${idx})">
+                                <i class="fa-regular fa-comment-dots text-info"></i>
+                                <span id="note-btn-label-${day}-${idx}">${noteVal ? 'ملاحظة: ' + (noteVal.length > 25 ? noteVal.substring(0, 25) + '...' : noteVal) : '+ إضافة ملاحظة (Note)'}</span>
+                            </button>
+                            <div class="note-input-container" id="note-container-${day}-${idx}" style="${noteVal ? 'display: block;' : 'display: none;'}">
+                                <input type="text" id="input-note-${day}-${idx}" data-key="${noteKey}" 
+                                    placeholder="ملاحظات التمرين (مثلاً: زيادة الوزن الأسبوع القادم)..." value="${noteVal}"
+                                    oninput="handleNoteInput('${day}', ${idx}, this.value)">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="exercise-card-actions-wrapper">
-                        <button type="button" class="btn-card-ai" onclick="openExerciseAIAnalysis('${day}', ${idx})">
-                            <i class="fa-solid fa-robot text-warning me-1"></i> 🤖 AI Analysis (تحليل الأداء)
+                    <div class="exercise-card-actions">
+                        <button type="button" class="btn-card-ai" onclick="openExerciseAIAnalysis('${day}', ${idx})" title="تحليل أداء التمرين بالذكاء الاصطناعي">
+                            <i class="fa-solid fa-robot text-warning"></i> <span>AI تحليل</span>
                         </button>
-                        <div class="exercise-card-actions mt-1">
-                            <button type="button" class="btn-card-save" onclick="saveCard('${day}', ${idx})">
-                                <i class="fa-solid fa-check"></i> حفظ التمرين
-                            </button>
-                            <button type="button" class="btn-card-next" onclick="scrollToExercise('${day}', ${nextIdx})">
-                                التالي <i class="fa-solid fa-arrow-down"></i>
-                            </button>
-                        </div>
+                        <button type="button" class="btn-card-save" onclick="saveCard('${day}', ${idx})">
+                            <i class="fa-solid fa-check"></i> <span>حفظ</span>
+                        </button>
+                        <button type="button" class="btn-card-next" onclick="scrollToExercise('${day}', ${nextIdx})" title="الانتقال للتمرين التالي">
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </button>
                     </div>
                 `;
 
@@ -1536,6 +1734,18 @@
                 p.classList.toggle('selected', p.innerText.trim() === value.trim());
             });
 
+            // Update custom pill if non-standard value
+            const customPill = document.getElementById(`rir-pill-custom-${day}-${idx}`);
+            if (customPill) {
+                if (value && !['0', '1', '2', '3'].includes(value)) {
+                    customPill.innerText = value;
+                    customPill.classList.add('selected');
+                } else {
+                    customPill.innerText = '✏️';
+                    if (['0', '1', '2', '3'].includes(value)) customPill.classList.remove('selected');
+                }
+            }
+
             const tableInput = document.querySelector(`input[data-key="${key}"]`);
             if (tableInput) tableInput.value = value;
 
@@ -1547,7 +1757,20 @@
             const input = document.getElementById(`input-rir-${day}-${idx}`);
             if (input) {
                 input.value = val;
+                input.style.display = 'none';
                 handleRirInput(day, idx, val);
+            }
+        }
+
+        function toggleCustomRir(day, idx) {
+            const input = document.getElementById(`input-rir-${day}-${idx}`);
+            if (!input) return;
+            if (input.style.display === 'none' || !input.style.display) {
+                input.style.display = 'inline-block';
+                input.focus();
+                input.select();
+            } else {
+                input.style.display = 'none';
             }
         }
 
@@ -1558,7 +1781,63 @@
             const tableInput = document.querySelector(`input[data-key="${key}"]`);
             if (tableInput) tableInput.value = value;
 
+            const label = document.getElementById(`note-btn-label-${day}-${idx}`);
+            if (label) {
+                label.innerText = value.trim() ? 'ملاحظة: ' + (value.length > 25 ? value.substring(0, 25) + '...' : value) : '+ إضافة ملاحظة (Note)';
+            }
+
             triggerAutoSaveFeedback();
+        }
+
+        function toggleExerciseNote(day, idx) {
+            const container = document.getElementById(`note-container-${day}-${idx}`);
+            const input = document.getElementById(`input-note-${day}-${idx}`);
+            if (!container) return;
+            if (container.style.display === 'none' || !container.style.display) {
+                container.style.display = 'block';
+                if (input) input.focus();
+            } else {
+                if (!input || !input.value.trim()) {
+                    container.style.display = 'none';
+                }
+            }
+        }
+
+        // Toggle GIF modal
+        function openExerciseGifModal(day, idx) {
+            const ex = exercisesData[day][idx];
+            if (!ex) return;
+            const modalTitle = document.getElementById('gifModalTitle');
+            const modalImg = document.getElementById('gifModalImage');
+            const modalFocus = document.getElementById('gifModalFocusBadge');
+            const modalTarget = document.getElementById('gifModalTargetBadge');
+
+            if (modalTitle) modalTitle.innerText = `${ex.name}`;
+            if (modalImg) {
+                modalImg.src = ex.gif || '';
+                modalImg.alt = ex.name;
+            }
+            if (modalFocus) modalFocus.innerText = `التركيز: ${ex.focus}`;
+            if (modalTarget) modalTarget.innerText = `${ex.sets} مجموعات × ${ex.reps} تكرار`;
+
+            const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('exerciseGifModal'));
+            modal.show();
+        }
+
+        function handleGifError(img) {
+            img.onerror = null;
+            img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="4"></rect><path d="M7 15h10M7 9h10M12 7v10"></path></svg>';
+        }
+
+        // Toggle GIFs globally
+        function toggleGifsVisibility() {
+            showExerciseGifs = !showExerciseGifs;
+            localStorage.setItem('gym_tracker_show_gifs', showExerciseGifs ? 'true' : 'false');
+            document.body.classList.toggle('hide-gifs', !showExerciseGifs);
+            const btn = document.getElementById('btnToggleGifs');
+            const text = document.getElementById('gifToggleText');
+            if (btn) btn.classList.toggle('active', showExerciseGifs);
+            if (text) text.innerText = showExerciseGifs ? 'الصور' : 'الصور: مخفية';
         }
 
         function handleProgressInput(key, value) {
@@ -1618,7 +1897,7 @@
             const card = document.getElementById(`card-${day}-${idx}`);
             if (card) {
                 card.classList.toggle('is-completed', isComplete && hasAny);
-                const statusBadgeContainer = card.querySelector('.exercise-card-header > div:last-child');
+                const statusBadgeContainer = card.querySelector('.exercise-status-container') || card.querySelector('.exercise-card-header > div:last-child');
                 if (statusBadgeContainer) {
                     if (isComplete && hasAny) {
                         statusBadgeContainer.innerHTML = '<span class="exercise-status-badge status-completed"><i class="fa-solid fa-circle-check me-1"></i> مكتمل</span>';
@@ -1671,25 +1950,24 @@
             }
         }
 
-        // Toggle History Accordion
-        function toggleHistoryAccordion(id) {
+        // Toggle History Drawer & Accordion
+        function toggleHistoryDrawer(id) {
             const el = document.getElementById(id);
             const iconId = id.replace('hist-', 'hist-icon-');
             const icon = document.getElementById(iconId);
 
+            if (!el) return;
             if (el.style.display === 'none' || !el.style.display) {
                 el.style.display = 'block';
-                if (icon) {
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-up');
-                }
+                if (icon) icon.classList.add('open');
             } else {
                 el.style.display = 'none';
-                if (icon) {
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
-                }
+                if (icon) icon.classList.remove('open');
             }
+        }
+
+        function toggleHistoryAccordion(id) {
+            toggleHistoryDrawer(id);
         }
 
         // Save card single
@@ -2344,6 +2622,15 @@
                     localStorage.setItem('gym_tracker_active_week', currentWeek);
                     renderAllViews();
                 });
+            }
+
+            // Initialize GIF toggle button state
+            if (!showExerciseGifs) {
+                document.body.classList.add('hide-gifs');
+                const btn = document.getElementById('btnToggleGifs');
+                const text = document.getElementById('gifToggleText');
+                if (btn) btn.classList.remove('active');
+                if (text) text.innerText = 'الصور: مخفية';
             }
 
             renderAllViews();
