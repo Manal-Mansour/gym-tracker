@@ -1432,7 +1432,7 @@
                                 <input type="number" step="0.5" inputmode="decimal" enterkeyhint="next"
                                     class="form-control-input set-weight-input" 
                                     id="input-weight-${day}-${idx}-${s}"
-                                    data-day="${day}" data-idx="${idx}" data-set="${s}" data-key="${setInfo.key}"
+                                    data-day="${day}" data-idx="${idx}" data-set="${s}"
                                     placeholder="الوزن" value="${setInfo.parsed.weight || ''}" 
                                     oninput="handleSetInput('${day}', ${idx}, ${s})"
                                     onkeydown="handleInputKeydown(event, '${day}', ${idx}, ${s}, 'weight', ${ex.sets})"
@@ -1443,7 +1443,7 @@
                                 <input type="number" step="1" inputmode="numeric" enterkeyhint="${s < ex.sets ? 'next' : 'next'}"
                                     class="form-control-input set-reps-input" 
                                     id="input-reps-${day}-${idx}-${s}"
-                                    data-day="${day}" data-idx="${idx}" data-set="${s}" data-key="${setInfo.key}"
+                                    data-day="${day}" data-idx="${idx}" data-set="${s}"
                                     placeholder="تكرار" value="${setInfo.parsed.reps || ''}" 
                                     oninput="handleSetInput('${day}', ${idx}, ${s})"
                                     onkeydown="handleInputKeydown(event, '${day}', ${idx}, ${s}, 'reps', ${ex.sets})"
@@ -1527,7 +1527,7 @@
                                 </span>
                             </div>
                             <input type="number" step="0.5" min="0" max="10" inputmode="decimal"
-                                id="input-rir-${day}-${idx}" data-key="${rirKey}" 
+                                id="input-rir-${day}-${idx}" 
                                 placeholder="RIR" value="${rirVal}"
                                 style="${rirVal && !['0','1','2','3'].includes(rirVal) ? 'width: 52px; height: 30px;' : 'display: none; width: 52px; height: 30px;'}"
                                 class="form-control form-control-sm text-center fw-bold"
@@ -1541,7 +1541,7 @@
                                 <span id="note-btn-label-${day}-${idx}">${noteVal ? 'ملاحظة: ' + (noteVal.length > 25 ? noteVal.substring(0, 25) + '...' : noteVal) : '+ إضافة ملاحظة (Note)'}</span>
                             </button>
                             <div class="note-input-container" id="note-container-${day}-${idx}" style="${noteVal ? 'display: block;' : 'display: none;'}">
-                                <input type="text" id="input-note-${day}-${idx}" data-key="${noteKey}" 
+                                <input type="text" id="input-note-${day}-${idx}" 
                                     placeholder="ملاحظات التمرين (مثلاً: زيادة الوزن الأسبوع القادم)..." value="${noteVal}"
                                     oninput="handleNoteInput('${day}', ${idx}, this.value)">
                             </div>
@@ -1715,8 +1715,8 @@
             localStorage.setItem(key, formatted);
 
             // Sync with desktop table input if exists
-            const tableInput = document.querySelector(`input[data-key="${key}"]`);
-            if (tableInput && tableInput !== weightInput && tableInput !== repsInput) {
+            const tableInput = document.querySelector(`#table-${day} input[data-key="${key}"]`);
+            if (tableInput) {
                 tableInput.value = formatted;
             }
 
@@ -1746,7 +1746,7 @@
                 }
             }
 
-            const tableInput = document.querySelector(`input[data-key="${key}"]`);
+            const tableInput = document.querySelector(`#table-${day} input[data-key="${key}"]`);
             if (tableInput) tableInput.value = value;
 
             triggerAutoSaveFeedback();
@@ -1778,7 +1778,7 @@
             const key = `workout_${day}_w${currentWeek}_ex${idx}_note`;
             localStorage.setItem(key, value);
 
-            const tableInput = document.querySelector(`input[data-key="${key}"]`);
+            const tableInput = document.querySelector(`#table-${day} input[data-key="${key}"]`);
             if (tableInput) tableInput.value = value;
 
             const label = document.getElementById(`note-btn-label-${day}-${idx}`);
@@ -1869,7 +1869,7 @@
                 const formatted = formatSetValue(s1Weight, s1Reps);
                 localStorage.setItem(key, formatted);
 
-                const tableInput = document.querySelector(`input[data-key="${key}"]`);
+                const tableInput = document.querySelector(`#table-${day} input[data-key="${key}"]`);
                 if (tableInput) tableInput.value = formatted;
             }
 
@@ -1980,7 +1980,7 @@
                     const key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
                     const formatted = formatSetValue(w.value, r.value);
                     localStorage.setItem(key, formatted);
-                    const tableInput = document.querySelector(`input[data-key="${key}"]`);
+                    const tableInput = document.querySelector(`#table-${day} input[data-key="${key}"]`);
                     if (tableInput) tableInput.value = formatted;
                 }
             }
@@ -1988,14 +1988,14 @@
             if (rir) {
                 const rirKey = `workout_${day}_w${currentWeek}_ex${idx}_rir`;
                 localStorage.setItem(rirKey, rir.value);
-                const tableInput = document.querySelector(`input[data-key="${rirKey}"]`);
+                const tableInput = document.querySelector(`#table-${day} input[data-key="${rirKey}"]`);
                 if (tableInput) tableInput.value = rir.value;
             }
             const note = document.getElementById(`input-note-${day}-${idx}`);
             if (note) {
                 const noteKey = `workout_${day}_w${currentWeek}_ex${idx}_note`;
                 localStorage.setItem(noteKey, note.value);
-                const tableInput = document.querySelector(`input[data-key="${noteKey}"]`);
+                const tableInput = document.querySelector(`#table-${day} input[data-key="${noteKey}"]`);
                 if (tableInput) tableInput.value = note.value;
             }
 
@@ -2055,23 +2055,35 @@
                         const r = document.getElementById(`input-reps-${day}-${idx}-${s}`);
                         if (w && r) {
                             const key = `workout_${day}_w${currentWeek}_ex${idx}_s${s}`;
-                            localStorage.setItem(key, formatSetValue(w.value, r.value));
+                            const formatted = formatSetValue(w.value, r.value);
+                            localStorage.setItem(key, formatted);
+                            const tableInput = document.querySelector(`#table-${day} input[data-key="${key}"]`);
+                            if (tableInput) tableInput.value = formatted;
                         }
                     }
                     const rir = document.getElementById(`input-rir-${day}-${idx}`);
                     if (rir) {
-                        localStorage.setItem(`workout_${day}_w${currentWeek}_ex${idx}_rir`, rir.value);
+                        const rirKey = `workout_${day}_w${currentWeek}_ex${idx}_rir`;
+                        localStorage.setItem(rirKey, rir.value);
+                        const tableInput = document.querySelector(`#table-${day} input[data-key="${rirKey}"]`);
+                        if (tableInput) tableInput.value = rir.value;
                     }
                     const note = document.getElementById(`input-note-${day}-${idx}`);
                     if (note) {
-                        localStorage.setItem(`workout_${day}_w${currentWeek}_ex${idx}_note`, note.value);
+                        const noteKey = `workout_${day}_w${currentWeek}_ex${idx}_note`;
+                        localStorage.setItem(noteKey, note.value);
+                        const tableInput = document.querySelector(`#table-${day} input[data-key="${noteKey}"]`);
+                        if (tableInput) tableInput.value = note.value;
                     }
                 });
             });
 
             // Save progress
             document.querySelectorAll('#progress-cards-container input[data-key]').forEach(input => {
-                localStorage.setItem(input.getAttribute('data-key'), input.value);
+                const key = input.getAttribute('data-key');
+                localStorage.setItem(key, input.value);
+                const tableInput = document.querySelector(`#table-Progress input[data-key="${key}"]`);
+                if (tableInput) tableInput.value = input.value;
             });
 
             if (notify) {
